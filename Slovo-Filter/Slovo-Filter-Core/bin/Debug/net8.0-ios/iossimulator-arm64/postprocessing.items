@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <_PostProcessingItem Include="Slovo-Filter-Core.app/Slovo-Filter-Core">
+      <IsAppExtension>false</IsAppExtension>
+      <BCSymbolMapName>Slovo-Filter-Core.bcsymbolmap</BCSymbolMapName>
+      <NoDSymUtil>true</NoDSymUtil>
+      <dSYMSourcePathExists>false</dSYMSourcePathExists>
+      <NoSymbolStrip>true</NoSymbolStrip>
+      <dSYMInfoPlistRelativePath>Slovo-Filter-Core.app.dSYM\Contents\Info.plist</dSYMInfoPlistRelativePath>
+      <SymbolFile>/Users/tatanasov/Code/Slovo-Filter/Slovo-Filter/Slovo-Filter-Core/obj/Debug/net8.0-ios/iossimulator-arm64/mtouch-symbols.list</SymbolFile>
+      <DSymName>Slovo-Filter-Core.app.dSYM</DSymName>
+      <SourceProjectPath>/Users/tatanasov/Code/Slovo-Filter/Slovo-Filter/Slovo-Filter-Core</SourceProjectPath>
+      <IsXPCService></IsXPCService>
+    </_PostProcessingItem>
+  </ItemGroup>
+</Project>
