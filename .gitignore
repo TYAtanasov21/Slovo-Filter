@@ -1,0 +1,69 @@
+### JetBrains Rider ###
+.idea/
+.idea/**/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/modules.xml
+.idea/vcs.xml
+.idea/assetWizardSettings.xml
+.idea/shelf/
+.idea/runConfigurations/
+.idea/gradle.xml
+.idea/sonarlint/
+
+# User-specific files
+*.iml
+*.ipr
+*.iws
+
+### Build ###
+bin/
+obj/
+debug/
+release/
+build/
+out/
+
+### Logs ###
+*.log
+logs/
+
+### Generated files ###
+*.user
+*.userosscache
+*.suo
+*.tmp
+*.cache
+*.csproj.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+
+### Dependency caches ###
+*.deps.json
+*.dll
+*.exe
+*.mdb
+*.app
+*.so
+*.dylib
+*.idb
+
+### Rider settings ###
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/shelf/
+.idea/**/runConfigurations/
+
+### OS generated files ###
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+
+### Others ###
+*.lock
+project.lock.json
+project.fragment.lock.json
