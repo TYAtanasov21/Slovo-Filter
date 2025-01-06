@@ -1,0 +1,67 @@
+# .NET MAUI
+bin/
+obj/
+out/
+
+# User-specific files
+.vscode/
+.idea/
+
+# User-specific config files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Build results
+*.exe
+*.dll
+*.pdb
+*.app
+*.apk
+*.ipa
+
+# IDE config files
+.vs/
+.vsconfig
+
+# macOS specific
+.DS_Store
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+
+# JetBrains Rider
+.idea/
+
+# npm/Yarn lock files (if any)
+package-lock.json
+yarn.lock
+
+# Temporary files from Visual Studio for Mac
+.vscode/
+
+# Visual Studio for Mac
+.vscode/
+
+# Android specific files
+.idea/
+.gradle/
+local.properties
+*.iml
+
+# iOS specific files
+Pods/
+*.xcodeproj
+*.xcworkspace
+
+# MAUI templates cache
+.maui/
+
+# User-generated files
+Generated/
+
+# Log files
+*.log
