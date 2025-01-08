@@ -1,4 +1,4 @@
-﻿namespace Slovo_Filter_Core;
+﻿namespace Slovo_Filter;
 
 public partial class AppShell : Shell
 {

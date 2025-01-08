@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="Slovo_Filter_Core.AppShell"
+    x:Class="Slovo_Filter.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Slovo_Filter_Core"
+    xmlns:local="clr-namespace:Slovo_Filter"
     Shell.FlyoutBehavior="Disabled"
-    Title="Slovo_Filter_Core">
+    Title="Slovo_Filter">
 
     <ShellContent
         Title="Home"

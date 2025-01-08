@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Slovo_Filter_Core;
+namespace Slovo_Filter;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

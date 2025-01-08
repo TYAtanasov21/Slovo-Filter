@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Slovo_Filter_Core;
+namespace Slovo_Filter;
 
 class Program : MauiApplication
 {

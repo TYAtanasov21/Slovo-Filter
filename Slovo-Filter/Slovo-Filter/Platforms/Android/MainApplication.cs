@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Slovo_Filter_Core;
+namespace Slovo_Filter;
 
 [Application]
 public class MainApplication : MauiApplication

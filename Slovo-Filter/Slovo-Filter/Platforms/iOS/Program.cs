@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Slovo_Filter_Core;
+namespace Slovo_Filter;
 
 public class Program
 {
