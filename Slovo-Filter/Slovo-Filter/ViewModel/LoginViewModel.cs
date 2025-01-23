@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows.Input;
 using Slovo_Filter_DAL.Models;
 using System.Windows.Input;
@@ -6,40 +7,68 @@ namespace Slovo_Filter.ViewModel;
 
 public class LoginViewModel : BaseViewModel
 {
-    private string _username;
+        public event PropertyChangedEventHandler PropertyChanged;
+        public ICommand NavigateToRegisterCommand { get; }
+        private string _email;
+        private string _password;
 
-    public string Username
-    {
-        get => _username;
-        set => SetProperty(ref _username, value);
-    }
-    
-    private string _password;
-
-    public string Password
-    {
-        get => _password;
-        set => SetProperty(ref _password, value);
-    }
-    
-    public ICommand LoginCommand { get; }
-
-    public LoginViewModel()
-    {
-        LoginCommand = new Command(OnLoginClicked);
-    }
-
-    private async void OnLoginClicked()
-    {
-        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+        public string Email
         {
-            await App.Current.MainPage.DisplayAlert("Error", "Please fill all fields", "OK");
-            return;
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
         }
-        await App.Current.MainPage.Navigation.PushModalAsync(new LoginPage());
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        public ICommand SignInCommand { get; }
         
-    }
-    
-    
-    
+        public LoginViewModel()
+        {
+            SignInCommand = new Command(async () => await SignInAsync());
+            NavigateToRegisterCommand = new Command(OnNavigateToRegister);
+        }
+
+        private async void OnNavigateToRegister()
+        {
+            if (Application.Current?.MainPage != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
+            }
+            
+        }
+        
+        private async Task SignInAsync()
+        {
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Please fill in all fields", "OK");
+                return;
+            }
+
+            if (Email == "tya" && Password == "123")
+            {
+                await App.Current.MainPage.DisplayAlert("Success", "You are signed in!", "OK");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Invalid credentials", "OK");
+            }
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 }
