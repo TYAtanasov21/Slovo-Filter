@@ -71,7 +71,7 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           Text="{Binding Email, Mode=TwoWay}"/>
+                           x:Name = "EmailEntry"/>
                 </Grid>
                 <Grid Grid.Row = "2"
                       Padding="0, 10, 0, 10">
@@ -103,7 +103,7 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           Text="{Binding Email, Mode=TwoWay}"/>
+                           x:Name = "PasswordEntry"/>
                 </Grid>
                 
 
@@ -132,7 +132,7 @@
                             VerticalOptions="End"
                             CornerRadius="13"
                             FontFamily="RobotoBold"
-                            Command = "{Binding SignInCommand}"/>
+                            Clicked = "OnLoginButtonClicked"/>
                 </Grid>
                 
                 <Grid Grid.Row = "4">

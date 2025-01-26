@@ -9,9 +9,32 @@ namespace Slovo_Filter;
 
 public partial class LoginPage : ContentPage
 {
+    private readonly LoginViewModel _viewModel;
     public LoginPage()
     {
         InitializeComponent();
-        BindingContext = new LoginViewModel();
+        _viewModel = new LoginViewModel();
+        BindingContext = _viewModel;
     }
+
+    private async void OnLoginButtonClicked(object sender, System.EventArgs e)
+    {
+        var email = EmailEntry.Text;
+        var password = PasswordEntry.Text;
+        
+        var(isSignedIn, message) = await _viewModel.LoginUserAsync(email, password);
+
+        if (isSignedIn)
+        {
+            Console.WriteLine("Successfully logged in");
+            await DisplayAlert("Login Success", message, "OK");
+        }
+        else
+        {
+            Console.WriteLine("Login Failed");
+            await DisplayAlert("Login Failed", message, "OK");
+        }
+        
+    }
+    
 }

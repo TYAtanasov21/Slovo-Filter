@@ -1,73 +1,51 @@
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows.Input;
+using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
 
-public class LoginViewModel : BaseViewModel
+public class LoginViewModel 
 {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ICommand NavigateToRegisterCommand { get; }
-        private string _email;
-        private string _password;
+    private readonly UserRepository _userRepository;
+    public ICommand NavigateToRegisterCommand { get; }
 
-        public string Email
+    public LoginViewModel()
+    {
+        _userRepository = new UserRepository();
+        NavigateToRegisterCommand = new Command(OnNavigateToRegister);
+    }
+    private async void OnNavigateToRegister()
+    {
+        if (Application.Current?.MainPage != null)
         {
-            get => _email;
-            set
-            {
-                _email = value;
-                OnPropertyChanged(nameof(Email));
-            }
+            await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
         }
-
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
-
-        public ICommand SignInCommand { get; }
-        
-        public LoginViewModel()
-        {
-            SignInCommand = new Command(async () => await SignInAsync());
-            NavigateToRegisterCommand = new Command(OnNavigateToRegister);
-        }
-
-        private async void OnNavigateToRegister()
-        {
-            if (Application.Current?.MainPage != null)
-            {
-                await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
-            }
             
-        }
-        
-        private async Task SignInAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-            {
-                await App.Current.MainPage.DisplayAlert("Error", "Please fill in all fields", "OK");
-                return;
-            }
+    }
 
-            if (Email == "tya" && Password == "123")
+    public async Task<(bool, string)> LoginUserAsync(string email, string password)
+    {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        {
+            return(false, "Email and/or password are required");
+        }
+
+        try
+        {
+            var isAuthenticated = await _userRepository.LoginUserAsync(email, password);
+
+            if (isAuthenticated)
             {
-                await App.Current.MainPage.DisplayAlert("Success", "You are signed in!", "OK");
+                return (true, "Login Successful");
             }
             else
             {
-                await App.Current.MainPage.DisplayAlert("Error", "Invalid credentials", "OK");
+                return (false, "Login Failed");
             }
         }
-
-        private void OnPropertyChanged(string propertyName)
+        catch (Exception ex)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return (false, $"An error occured: {ex.Message}");
         }
+    }
 }
