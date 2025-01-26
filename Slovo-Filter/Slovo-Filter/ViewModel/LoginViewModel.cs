@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Windows.Input;
-using Slovo_Filter_DAL.Models;
 using System.Windows.Input;
 
 namespace Slovo_Filter.ViewModel;

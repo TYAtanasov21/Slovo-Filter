@@ -6,7 +6,7 @@
              xmlns:viewModels="clr-namespace:Slovo_Filter.ViewModel"
              x:DataType="viewModels:RegisterViewModel"
              BackgroundColor="Black"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -49,7 +49,7 @@
                     
                     <Label 
                         Grid.Row = "0"
-                        Text = "First and Last name"
+                        Text = "Fist name"
                         FontSize = "20"
                         HorizontalOptions="Start"
                         TextColor="White"
@@ -57,7 +57,7 @@
                         FontFamily="RobotoMedium"
                     />
                     <Entry Grid.Row = "1"
-                           Placeholder="John Doe"
+                           Placeholder="John"
                            FontSize="20"
                            BackgroundColor="Black"
                            TextColor="White"
@@ -69,11 +69,46 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
+                           x:Name = "FirstNameEntry"
                            />
                 </Grid>
                 
                 
                 <Grid Grid.Row = "2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <Label 
+                        Grid.Row = "0"
+                        Text = "Last name"
+                        FontSize = "20"
+                        HorizontalOptions="Start"
+                        TextColor="White"
+                        Padding="0,0,0, 10"
+                        FontFamily="RobotoMedium"
+                    />
+                    <Entry Grid.Row = "1"
+                           Placeholder="Doe"
+                           FontSize="20"
+                           BackgroundColor="Black"
+                           TextColor="White"
+                           PlaceholderColor="Gray"
+                           Margin="0,10"
+                           Keyboard="Email"
+                           HeightRequest="50"
+                           WidthRequest="450"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"
+                           FontFamily="RobotoMedium"
+                           x:Name = "LastNameEntry"
+                           />
+                </Grid>
+                
+                
+                
+                <Grid Grid.Row = "3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -89,7 +124,7 @@
                         FontFamily="RobotoMedium"
                     />
                     <Entry Grid.Row = "1"
-                           Placeholder="hello@company.com"
+                           Placeholder="example@company.com"
                            FontSize="20"
                            BackgroundColor="Black"
                            TextColor="White"
@@ -101,12 +136,12 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
+                           x:Name="EmailEntry"
                            />
                 </Grid>
                 
                 
-                
-                <Grid Grid.Row = "3">
+                <Grid Grid.Row = "4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -134,38 +169,7 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           />
-                </Grid>
-                
-                
-                <Grid Grid.Row = "4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    
-                    <Label 
-                        Grid.Row = "0"
-                        Text = "Confirm password"
-                        FontSize = "20"
-                        HorizontalOptions="Start"
-                        TextColor="White"
-                        Padding="0,0,0, 10"
-                        FontFamily="RobotoMedium"
-                    />
-                    <Entry Grid.Row = "1"
-                           Placeholder="********"
-                           FontSize="20"
-                           BackgroundColor="Black"
-                           TextColor="White"
-                           PlaceholderColor="Gray"
-                           Margin="0,10"
-                           Keyboard="Email"
-                           HeightRequest="50"
-                           WidthRequest="450"
-                           HorizontalOptions="FillAndExpand"
-                           VerticalOptions="Center"
-                           FontFamily="RobotoMedium"
+                           x:Name = "PasswordEntry"
                            />
                 </Grid>
                 <Grid Grid.Row = "5">
@@ -181,6 +185,7 @@
                         CornerRadius="13"
                         FontFamily="RobotoBold"
                         Margin = "0, 35, 0, 0"
+                        Clicked="OnRegisterButtonClicked"
                         ></Button>
                 </Grid>
             </Grid>

@@ -10,7 +10,7 @@ namespace Slovo_Filter_DAL
 {
     public class dbContext
     {
-        private readonly string _connectionString = "Server=slovofilter.postgres.database.azure.com;Database=test_db;Port=5432;User Id=postgres;Password=SlovoFilter2025;Ssl Mode=Require;";
+        private readonly string _connectionString = "Server=slovofilter.postgres.database.azure.com;Database=postgres;Port=5432;User Id=postgres;Password=SlovoFilter2025;Ssl Mode=Require;";
 
 
         public async Task<DataTable> ExecuteQueryAsync(string query, Dictionary<string, object> parameters = null)
@@ -50,5 +50,6 @@ namespace Slovo_Filter_DAL
             await connection.OpenAsync();
             return await command.ExecuteNonQueryAsync();
         }
+        
     }
 }
