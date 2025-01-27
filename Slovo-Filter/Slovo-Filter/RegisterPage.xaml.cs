@@ -26,6 +26,8 @@ namespace Slovo_Filter
             {
                 Console.WriteLine("successfully registered");
                 await DisplayAlert("Success", "User registered successfully!", "OK");
+                
+                await Navigation.PushAsync(new MainApp());
             }
             else
             {

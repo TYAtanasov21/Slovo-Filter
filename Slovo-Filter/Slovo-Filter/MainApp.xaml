@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Slovo_Filter.MainApp"
+             xmlns:viewModels="clr-namespace:Slovo_Filter.ViewModel"
+             x:DataType="viewModels:MainAppViewModel"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0F0F0F"
+             >
+    <ContentPage.Content>
+            <Label
+                Text = "This is the main messaging APP"></Label>
+    </ContentPage.Content>
+</ContentPage>

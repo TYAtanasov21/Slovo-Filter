@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using Npgsql;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Slovo_Filter_DAL
 {
     public class dbContext
     {
         private readonly string _connectionString = "Server=slovofilter.postgres.database.azure.com;Database=postgres;Port=5432;User Id=postgres;Password=SlovoFilter2025;Ssl Mode=Require;";
-
+        
 
         public async Task<DataTable> ExecuteQueryAsync(string query, Dictionary<string, object> parameters = null)
         {

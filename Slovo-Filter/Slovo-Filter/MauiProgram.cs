@@ -21,6 +21,15 @@ public static class MauiProgram
             });
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<LoginViewModel>();
+
+        // var configuration = new ConfigurationBuilder()
+        //     .SetBasePath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData))
+        //     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //     .Build();
+        //
+        // var connectionString = configuration.GetConnectionString("DefaultConnection");
+        // Console.WriteLine(connectionString);
+        
         
 #if DEBUG
         builder.Logging.AddDebug();

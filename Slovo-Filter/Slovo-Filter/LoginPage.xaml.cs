@@ -28,6 +28,8 @@ public partial class LoginPage : ContentPage
         {
             Console.WriteLine("Successfully logged in");
             await DisplayAlert("Login Success", message, "OK");
+            
+            await Navigation.PushAsync(new MainApp());
         }
         else
         {

@@ -37,11 +37,12 @@
 
                 <Label Grid.Row="0"
                        Text="Sign In to Slovo-Filter"
-                       FontSize="40"
+                       FontSize="{OnPlatform MacCatalyst='40', WinUI='40' }"
                        HorizontalOptions="Start"
                        TextColor="White"
                        Padding="3, 4, 3, 95 "
-                       FontFamily="RobotoExtraBold"/>
+                       FontFamily="RobotoExtraBold"
+                       />
                 
                 <Grid Grid.Row = "1">
                     <Grid.RowDefinitions>
