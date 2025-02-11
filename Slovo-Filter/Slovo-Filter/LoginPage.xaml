@@ -34,7 +34,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
                 <Label Grid.Row="0"
                        Text="Sign In to Slovo-Filter"
                        FontSize="{OnPlatform MacCatalyst='40', WinUI='40' }"
@@ -169,6 +168,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label
                         Text = "You don't have an account?"
@@ -188,6 +188,16 @@
                         HorizontalOptions="Center"
                             Command="{Binding NavigateToRegisterCommand}"
                         />
+                    <Button Grid.Row = "2"
+                            BackgroundColor="Transparent"
+                            Text = "Go to main page DEBUGGING"
+                            Margin="0, 4, 0, 0"
+                            TextColor="Cyan"
+                            FontFamily="RobotoBold"
+                            FontSize = "16"
+                            HorizontalOptions="Center"
+                            Command="{Binding NavigateToMain}"
+                    />
                     
                     
                     <!--TODO- oAuth button here -->

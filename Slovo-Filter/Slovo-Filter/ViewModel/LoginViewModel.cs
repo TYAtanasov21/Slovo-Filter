@@ -8,11 +8,13 @@ public class LoginViewModel
 {
     private readonly UserRepository _userRepository;
     public ICommand NavigateToRegisterCommand { get; }
+    public ICommand NavigateToMain { get; set; }
 
     public LoginViewModel()
     {
         _userRepository = new UserRepository();
         NavigateToRegisterCommand = new Command(OnNavigateToRegister);
+        NavigateToMain = new Command(OnNavigateToMain);
     }
     private async void OnNavigateToRegister()
     {
@@ -20,8 +22,17 @@ public class LoginViewModel
         {
             await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
         }
-            
     }
+
+    private async void OnNavigateToMain()
+    {
+        Console.WriteLine("OnNavigateToMain");
+        if (Application.Current?.MainPage != null)
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new MainApp());
+        }
+    }
+    
 
     public async Task<(bool, string)> LoginUserAsync(string email, string password)
     {

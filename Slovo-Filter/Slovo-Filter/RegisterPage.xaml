@@ -163,11 +163,11 @@
                            TextColor="White"
                            PlaceholderColor="Gray"
                            Margin="0,10"
-                           Keyboard="Email"
                            HeightRequest="50"
                            WidthRequest="450"
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
+                           IsPassword="True"
                            FontFamily="RobotoMedium"
                            x:Name = "PasswordEntry"
                            />

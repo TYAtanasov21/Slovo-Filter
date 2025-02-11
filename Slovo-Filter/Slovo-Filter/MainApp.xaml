@@ -8,8 +8,24 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0F0F0F"
              >
-    <ContentPage.Content>
-            <Label
-                Text = "This is the main messaging APP"></Label>
-    </ContentPage.Content>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <BoxView Grid.Column="0" BackgroundColor="#1E2022" CornerRadius="10" Margin="12"/>
+            <StackLayout Grid.Column="1" Padding="20">
+                <Label Text="Chat Room" FontSize="24" HorizontalOptions="Center" />
+                <ScrollView>
+                    <Label Text="{Binding ChatHistory}" />
+                </ScrollView>
+                <Entry Text="{Binding Message}" Placeholder="Enter message..." />
+                <Button Text="Send" Command="{Binding SendMessageCommand}" />
+            </StackLayout>
+        
+    </Grid>
 </ContentPage>

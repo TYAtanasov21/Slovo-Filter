@@ -36,7 +36,6 @@ public partial class LoginPage : ContentPage
             Console.WriteLine("Login Failed");
             await DisplayAlert("Login Failed", message, "OK");
         }
-        
     }
     
 }
