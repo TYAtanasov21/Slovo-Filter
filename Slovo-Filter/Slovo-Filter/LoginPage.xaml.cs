@@ -23,12 +23,12 @@ public partial class LoginPage : ContentPage
         var password = PasswordEntry.Text;
         
         var(isSignedIn, message) = await _viewModel.LoginUserAsync(email, password);
-
+        
         if (isSignedIn)
         {
             Console.WriteLine("Successfully logged in");
             await DisplayAlert("Login Success", message, "OK");
-            
+            // Console.WriteLine(AppUser.UserId);
             await Navigation.PushAsync(new MainApp());
         }
         else

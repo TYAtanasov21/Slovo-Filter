@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Slovo_Filter_BLL.Services;
 namespace Slovo_Filter_DAL.Repositories
 {
+    
     public class UserRepository
     {
         private readonly dbContext _context;
@@ -13,9 +14,28 @@ namespace Slovo_Filter_DAL.Repositories
             _context = new dbContext();
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            var query = "SELECT id, firstname, lastname, email FROM users WHERE email = @Email";
+            var parameters = new Dictionary<string, object> { { "@Email", email } };
+
+            var dataTable = await _context.ExecuteQueryAsync(query, parameters);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                return new User
+                {
+                    Id = Convert.ToInt32(dataTable.Rows[0]["id"]),
+                    FirstName = dataTable.Rows[0]["firstname"].ToString(),
+                    LastName = dataTable.Rows[0]["lastname"].ToString(),
+                    Email = dataTable.Rows[0]["email"].ToString()
+                };
+            }
+
+            return null;
+        }
         public async Task<int> RegisterUserAsync(string firstName, string lastName, string email, string passwordHash)
         {
-            // Check if the email already exists
             var emailCheckQuery = "SELECT id FROM users WHERE email = @Email";
             var emailCheckParameters = new Dictionary<string, object> { { "@Email", email } };
             var emailCheckTable = await _context.ExecuteQueryAsync(emailCheckQuery, emailCheckParameters);

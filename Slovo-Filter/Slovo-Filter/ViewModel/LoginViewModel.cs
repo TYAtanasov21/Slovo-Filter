@@ -4,6 +4,16 @@ using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
 
+
+public class AppUser
+{
+    public static int UserId { get; set; }  
+    public static string FirstName { get; set; }
+    
+    public static string LastName { get; set; }
+    public static string Email { get; set; }
+}
+
 public class LoginViewModel 
 {
     private readonly UserRepository _userRepository;
@@ -27,6 +37,7 @@ public class LoginViewModel
     private async void OnNavigateToMain()
     {
         Console.WriteLine("OnNavigateToMain");
+        Console.WriteLine(AppUser.Email);
         if (Application.Current?.MainPage != null)
         {
             await Application.Current.MainPage.Navigation.PushAsync(new MainApp());
@@ -38,7 +49,7 @@ public class LoginViewModel
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
-            return(false, "Email and/or password are required");
+            return (false, "Email and/or password are required");
         }
 
         try
@@ -47,7 +58,22 @@ public class LoginViewModel
 
             if (isAuthenticated)
             {
-                return (true, "Login Successful");
+                // Fetch the user's details from the database
+                var user = await _userRepository.GetUserByEmailAsync(email);
+
+                if (user != null)
+                {
+                    // Store the user data in the static class
+                    AppUser.UserId = user.Id;
+                    AppUser.FirstName = user.FirstName;
+                    AppUser.Email = user.Email;
+
+                    return (true, "Login Successful");
+                }
+                else
+                {
+                    return (false, "User data not found");
+                }
             }
             else
             {
@@ -56,7 +82,7 @@ public class LoginViewModel
         }
         catch (Exception ex)
         {
-            return (false, $"An error occured: {ex.Message}");
+            return (false, $"An error occurred: {ex.Message}");
         }
     }
 }
