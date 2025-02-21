@@ -1,21 +1,14 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using Slovo_Filter_BLL.Services;
 using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
 
 
-public class AppUser
-{
-    public static int UserId { get; set; }  
-    public static string FirstName { get; set; }
-    
-    public static string LastName { get; set; }
-    public static string Email { get; set; }
-}
-
 public class LoginViewModel 
 {
+    public User User { get; private set; }
     private readonly UserRepository _userRepository;
     public ICommand NavigateToRegisterCommand { get; }
     public ICommand NavigateToMain { get; set; }
@@ -37,10 +30,10 @@ public class LoginViewModel
     private async void OnNavigateToMain()
     {
         Console.WriteLine("OnNavigateToMain");
-        Console.WriteLine(AppUser.Email);
+        Console.WriteLine(User.Email);
         if (Application.Current?.MainPage != null)
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new MainApp());
+            await Application.Current.MainPage.Navigation.PushAsync(new MainApp(User));
         }
     }
     
@@ -63,11 +56,7 @@ public class LoginViewModel
 
                 if (user != null)
                 {
-                    // Store the user data in the static class
-                    AppUser.UserId = user.Id;
-                    AppUser.FirstName = user.FirstName;
-                    AppUser.Email = user.Email;
-
+                    User = user;  // Store the logged-in user in the ViewModel
                     return (true, "Login Successful");
                 }
                 else

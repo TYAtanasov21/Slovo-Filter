@@ -24,10 +24,11 @@ namespace Slovo_Filter
 
             if (isRegistered)
             {
+                
                 Console.WriteLine("successfully registered");
                 await DisplayAlert("Success", "User registered successfully!", "OK");
                 
-                await Navigation.PushAsync(new MainApp());
+                await Navigation.PushAsync(new MainApp(_viewModel.User));
             }
             else
             {
