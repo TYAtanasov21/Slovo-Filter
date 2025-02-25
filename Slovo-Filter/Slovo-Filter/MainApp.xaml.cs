@@ -14,10 +14,11 @@ public partial class MainApp : ContentPage
     public MainApp(User user)
     {
         InitializeComponent();
-        var socketService = new SocketService();
-        _viewModel = new MainAppViewModel(socketService);
+        
+        _viewModel = new MainAppViewModel(user.Id.ToString());
         BindingContext = _viewModel;
         
         Console.WriteLine($"Logged in as: {user.Email}");
+        Console.WriteLine($"User ID is: {user.Id}");
     }
 }

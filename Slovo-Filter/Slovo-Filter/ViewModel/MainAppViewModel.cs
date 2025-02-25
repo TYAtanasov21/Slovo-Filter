@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -8,49 +9,52 @@ namespace Slovo_Filter.ViewModel;
 public class MainAppViewModel
 {
     private readonly SocketService _socketService;
-    private string _message;
-    private string _chatHistory;
+    private string _currentMessage;
+    public ObservableCollection<string> Messages { get; set; } = new();
+    public string RecieverId { get; set; } = string.Empty;
+    public string UserId { get; set; }
 
+    public string CurrentMessage
+    {
+        get => _currentMessage;
+        
+        set 
+        {
+        _currentMessage = value;
+        OnPropertyChanged();
+        }
+    }
+    
+    public ICommand SendMessageCommand { get; }
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string Message
-    {
-        get => _message;
-        set { _message = value; OnPropertyChanged(); }
-    }
 
-    public string ChatHistory
+    public MainAppViewModel(string userId)
     {
-        get => _chatHistory;
-        set { _chatHistory = value; OnPropertyChanged(); }
-    }
+        UserId = userId;
+        _socketService = new SocketService(userId);
 
-    public ICommand SendMessageCommand { get; }
-
-    public MainAppViewModel(SocketService socketService)
-    {
-        Console.WriteLine("Connecting...");
-        _socketService = socketService;
-        _socketService.OnMessageReceived += OnMessageReceived;
+        // Subscribe to incoming messages
+        _socketService.OnMessageReceived += (sender, message) =>
+        {
+            Console.WriteLine($"Message received from {sender}: {message}");
+            Messages.Add($"{sender}: {message}");
+        };
+        
         SendMessageCommand = new Command(SendMessage);
-    }
-
-    private void OnMessageReceived(string message)
-    {
-        ChatHistory += $"\n{message}";
     }
 
     private void SendMessage()
     {
-        if (!string.IsNullOrEmpty(Message))
+        if (!string.IsNullOrWhiteSpace(CurrentMessage) && !string.IsNullOrWhiteSpace(RecieverId))
         {
-            Console.WriteLine("Sending message..." + Message);
-            _socketService.SendMessage(Message);
-            Message = string.Empty;
+            _socketService.SendMessage(UserId.ToString(), RecieverId, CurrentMessage);
+            Messages.Add($"You: {CurrentMessage}");
+            CurrentMessage = string.Empty; // Clear message after sending
         }
     }
 
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

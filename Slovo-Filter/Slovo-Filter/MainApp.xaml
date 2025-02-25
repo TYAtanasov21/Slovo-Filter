@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Slovo_Filter.MainApp"
              xmlns:viewModels="clr-namespace:Slovo_Filter.ViewModel"
              x:DataType="viewModels:MainAppViewModel"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#0F0F0F"
-             >
+             BackgroundColor="#0F0F0F">
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        
+
         <BoxView Grid.Column="0" BackgroundColor="#1E2022" CornerRadius="10" Margin="12"/>
-            <StackLayout Grid.Column="1" Padding="20">
-                <Label Text="Chat Room" FontSize="24" HorizontalOptions="Center" />
-                <ScrollView>
-                    <Label Text="{Binding ChatHistory}" />
-                </ScrollView>
-                <Entry Text="{Binding Message}" Placeholder="Enter message..." />
-                <Button Text="Send" Command="{Binding SendMessageCommand}" />
-            </StackLayout>
-        
+
+        <StackLayout Grid.Column="1" Padding="20">
+            <Label Text="Chat Room" FontSize="24" HorizontalOptions="Center" TextColor="White"/>
+            
+            <!-- Scrollable message list -->
+            <ScrollView HeightRequest="400">
+                <CollectionView ItemsSource="{Binding Messages}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10" Margin="5" BackgroundColor="#333" CornerRadius="10">
+                                <Label Text="{Binding .}" TextColor="White"/>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+
+            <Entry Text="{Binding RecieverId}" Placeholder="Receiver ID..." TextColor="White"/>
+            <Entry Text="{Binding CurrentMessage}" Placeholder="Enter message..." TextColor="White"/>
+            <Button Text="Send" Command="{Binding SendMessageCommand}"/>
+        </StackLayout>
     </Grid>
 </ContentPage>
