@@ -97,6 +97,27 @@ namespace Slovo_Filter_DAL.Repositories
 
             return isPasswordValid;
         }
+        
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            var query = "SELECT id, firstname, lastname, email FROM users";
+            var dataTable = await _context.ExecuteQueryAsync(query, new Dictionary<string, object>());
+
+            var users = new List<User>();
+
+            foreach (System.Data.DataRow row in dataTable.Rows)
+            {
+                users.Add(new User
+                {
+                    Id = Convert.ToInt32(row["id"]),
+                    FirstName = row["firstname"].ToString(),
+                    LastName = row["lastname"].ToString(),
+                    Email = row["email"].ToString()
+                });
+            }
+
+            return users;
+        }
 
         
     }

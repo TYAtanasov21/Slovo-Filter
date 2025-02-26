@@ -3,25 +3,69 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Slovo_Filter_BLL.Services;
+using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
 
 public class MainAppViewModel
 {
     private readonly SocketService _socketService;
+    private readonly UserRepository _userRepository;
     private string _currentMessage;
     public ObservableCollection<string> Messages { get; set; } = new();
+    public ObservableCollection<User> Users { get; set; } = new();
+
     public string RecieverId { get; set; } = string.Empty;
     public string UserId { get; set; }
 
+    
+    //Current user declaration
+    private User _currentUser;
+    public User CurrentUser
+    {
+        get => _currentUser;
+        set
+        {
+            _currentUser = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged(nameof(FirstName));
+            OnPropertyChanged(nameof(LastName));
+        }
+    }
+    
+    public string Email => CurrentUser?.Email;
+    public string FirstName => CurrentUser?.FirstName;
+
+    public string LastName => CurrentUser?.LastName;
+
+    //Selected user declaration
+    private User _selectedUser;
+    public User SelectedUser
+    {
+        get => _selectedUser;
+        set
+        {
+            if (_selectedUser != value)
+            {
+                _selectedUser = value;
+                RecieverId = _selectedUser?.Id.ToString() ?? string.Empty;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(RecieverId));
+            }
+        }
+    }
+    
+    
+    //Message declaration
     public string CurrentMessage
     {
         get => _currentMessage;
         
         set 
         {
-        _currentMessage = value;
-        OnPropertyChanged();
+            _currentMessage = value;
+            OnPropertyChanged();
         }
     }
     
@@ -33,7 +77,8 @@ public class MainAppViewModel
     {
         UserId = userId;
         _socketService = new SocketService(userId);
-
+        _userRepository = new UserRepository();
+        
         // Subscribe to incoming messages
         _socketService.OnMessageReceived += (sender, message) =>
         {
@@ -41,14 +86,28 @@ public class MainAppViewModel
             Messages.Add($"{sender}: {message}");
         };
         
+        CurrentUser = new User();
+        LoadUsers();
+        
         SendMessageCommand = new Command(SendMessage);
+    }
+    
+    
+    private async void LoadUsers()
+    {
+        var users = await _userRepository.GetAllUsersAsync();
+        Users.Clear();
+        foreach (var user in users)
+        {
+            Users.Add(user);
+        }
     }
 
     private void SendMessage()
     {
         if (!string.IsNullOrWhiteSpace(CurrentMessage) && !string.IsNullOrWhiteSpace(RecieverId))
         {
-            _socketService.SendMessage(UserId.ToString(), RecieverId, CurrentMessage);
+            _socketService.SendMessage(UserId, RecieverId, CurrentMessage);
             Messages.Add($"You: {CurrentMessage}");
             CurrentMessage = string.Empty; // Clear message after sending
         }

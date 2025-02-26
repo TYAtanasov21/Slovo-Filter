@@ -1,6 +1,5 @@
 const express = require("express");
 const http = require("http");
-const { env } = require("process");
 const { Server } = require("socket.io");
 
 const app = express();
@@ -20,13 +19,15 @@ io.on("connection", (socket) => {
     socket.on("register", (userId) => {
         console.log(`Attempting to register user: ${userId}`);
         
+        // Ensure the user is not already registered
         if (users.has(userId)) {
             console.log(`User ${userId} is already online. Updating socket id.`);
         }
         
+        // Set or update the user in the Map
         users.set(userId, socket.id);
         console.log(`User ${userId} is now online`);
-        io.emit("active_users", Array.from(users.keys()));
+        console.log("Current users:", Array.from(users.keys())); // Shows all registered users
     });
 
     socket.on("private_message", ({ sender, receiver, message }) => {
@@ -39,26 +40,26 @@ io.on("connection", (socket) => {
     
         const receiverSocketId = users.get(receiver);
         if (receiverSocketId) {
-            const messageData = { sender, message };
+            const messageData = { sender, message };  // Ensure this is an OBJECT, not an array
             io.to(receiverSocketId).emit("private_message", messageData);
             console.log(`📩 Message sent from ${sender} to ${receiver}: ${message}`);
         } else {
             console.log(`⚠️ User ${receiver} is offline.`);
         }
     });
+    
 
     socket.on("disconnect", () => {
         for (let [userId, socketId] of users.entries()) {
             if (socketId === socket.id) {
                 users.delete(userId);
                 console.log(`User ${userId} disconnected`);
-                io.emit("active_users", Array.from(users.keys())); // Send updated list of active users
                 break;
             }
         }
     });
 });
 
-server.listen(process.env.PORT || 3000, () => {
+server.listen(3000, () => {
     console.log("🚀 Server running on http://127.0.0.1:3000");
 });

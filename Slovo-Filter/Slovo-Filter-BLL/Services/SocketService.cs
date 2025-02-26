@@ -31,7 +31,7 @@ namespace Slovo_Filter_BLL.Services
             {
                 Console.WriteLine($"🔌 Connecting to the server...");
 
-                _client = new SocketIOClient.SocketIO("http://172.20.10.4:3000");
+                _client = new SocketIOClient.SocketIO("http://127.0.0.1:3000");
                 
                 
                 _client.OnConnected += (sender, e) =>
