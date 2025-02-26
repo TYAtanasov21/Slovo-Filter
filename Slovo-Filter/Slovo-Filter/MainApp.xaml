@@ -49,7 +49,6 @@
                 </CollectionView>
             </ScrollView>
 
-            <Entry Text="{Binding RecieverId}" Placeholder="Receiver ID..." TextColor="White"/>
             <Entry Text="{Binding CurrentMessage}" Placeholder="Enter message..." TextColor="White"/>
             <Button Text="Send" Command="{Binding SendMessageCommand}"/>
         </StackLayout>

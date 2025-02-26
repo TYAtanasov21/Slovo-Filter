@@ -105,11 +105,11 @@ public class MainAppViewModel
 
     private void SendMessage()
     {
-        if (!string.IsNullOrWhiteSpace(CurrentMessage) && !string.IsNullOrWhiteSpace(RecieverId))
+        if (!string.IsNullOrWhiteSpace(CurrentMessage) && SelectedUser != null)
         {
             _socketService.SendMessage(UserId, RecieverId, CurrentMessage);
-            Messages.Add($"You: {CurrentMessage}");
-            CurrentMessage = string.Empty; // Clear message after sending
+            Messages.Add($"You to {SelectedUser.FirstName}: {CurrentMessage}");
+            CurrentMessage = string.Empty;
         }
     }
 

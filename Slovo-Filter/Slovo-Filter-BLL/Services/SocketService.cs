@@ -13,7 +13,7 @@ namespace Slovo_Filter_BLL.Services
     }
     public class SocketService
     {
-        private SocketIOClient.SocketIO _client; // Use SocketIO instead of SocketIoClient
+        private SocketIOClient.SocketIO _client;
         public event Action<string, string> OnMessageReceived;
 
         private readonly string _userId;
