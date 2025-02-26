@@ -34,14 +34,14 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
                 <Label Grid.Row="0"
                        Text="Sign In to Slovo-Filter"
-                       FontSize="40"
+                       FontSize="{OnPlatform MacCatalyst='40', WinUI='40' }"
                        HorizontalOptions="Start"
                        TextColor="White"
                        Padding="3, 4, 3, 95 "
-                       FontFamily="RobotoExtraBold"/>
+                       FontFamily="RobotoExtraBold"
+                       />
                 
                 <Grid Grid.Row = "1">
                     <Grid.RowDefinitions>
@@ -71,7 +71,7 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           Text="{Binding Email, Mode=TwoWay}"/>
+                           x:Name = "EmailEntry"/>
                 </Grid>
                 <Grid Grid.Row = "2"
                       Padding="0, 10, 0, 10">
@@ -103,7 +103,7 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           Text="{Binding Email, Mode=TwoWay}"/>
+                           x:Name = "PasswordEntry"/>
                 </Grid>
                 
 
@@ -132,7 +132,7 @@
                             VerticalOptions="End"
                             CornerRadius="13"
                             FontFamily="RobotoBold"
-                            Command = "{Binding SignInCommand}"/>
+                            Clicked = "OnLoginButtonClicked"/>
                 </Grid>
                 
                 <Grid Grid.Row = "4">
@@ -168,6 +168,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label
                         Text = "You don't have an account?"
@@ -187,6 +188,16 @@
                         HorizontalOptions="Center"
                             Command="{Binding NavigateToRegisterCommand}"
                         />
+                    <Button Grid.Row = "2"
+                            BackgroundColor="Transparent"
+                            Text = "Go to main page DEBUGGING"
+                            Margin="0, 4, 0, 0"
+                            TextColor="Cyan"
+                            FontFamily="RobotoBold"
+                            FontSize = "16"
+                            HorizontalOptions="Center"
+                            Command="{Binding NavigateToMain}"
+                    />
                     
                     
                     <!--TODO- oAuth button here -->
