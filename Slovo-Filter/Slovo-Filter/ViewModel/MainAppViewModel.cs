@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Slovo_Filter_BLL.Services;
+using Slovo_Filter_DAL.Models;
 using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
@@ -17,6 +18,22 @@ public class MainAppViewModel
 
     public string RecieverId { get; set; } = string.Empty;
     public string UserId { get; set; }
+    
+    private readonly MessageService _messageService;
+    public ObservableCollection<Message> MessageHistory { get; set; } = new();
+    
+    private bool _isLoading = false;
+
+    public bool isLoading
+    {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            OnPropertyChanged();
+        }
+    }
+    
 
     
     //Current user declaration
@@ -52,6 +69,17 @@ public class MainAppViewModel
                 RecieverId = _selectedUser?.Id.ToString() ?? string.Empty;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(RecieverId));
+
+                if (_selectedUser != null)
+                {
+                    LoadMessageHistoryAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    MessageHistory.Clear();
+                }
+                
+                
             }
         }
     }
@@ -70,6 +98,7 @@ public class MainAppViewModel
     }
     
     public ICommand SendMessageCommand { get; }
+    public ICommand LoadHistoryCommand { get; }
     public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -78,6 +107,7 @@ public class MainAppViewModel
         UserId = userId;
         _socketService = new SocketService(userId);
         _userRepository = new UserRepository();
+        _messageService = new MessageService();
         
         // Subscribe to incoming messages
         _socketService.OnMessageReceived += (sender, message) =>
@@ -86,10 +116,49 @@ public class MainAppViewModel
             Messages.Add($"{sender}: {message}");
         };
         
+        _socketService.OnMessageHistoryReceived += (messages) =>
+        {
+            Microsoft.Maui.Controls.Device.BeginInvokeOnMainThread(() =>
+                {
+                MessageHistory.Clear();
+                foreach (var message in messages.OrderBy(m => m.Date))
+                {
+                    // Set IsFromCurrentUser based on the current user ID
+                    message.IsFromCurrentUser = message.SenderId.ToString() == UserId;
+                    MessageHistory.Add(message);
+                }
+                isLoading = false;
+                });
+        };
+        
         CurrentUser = new User();
         LoadUsers();
-        
+
         SendMessageCommand = new Command(SendMessage);
+        LoadHistoryCommand = new Command(async () => await LoadMessageHistoryAsync());
+    }
+
+
+    private async Task LoadMessageHistoryAsync()
+    {
+        if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(RecieverId))
+            return;
+        try
+        {
+            isLoading = true;
+            MessageHistory.Clear();
+
+            _socketService.RequestMessageHistory(UserId, RecieverId, 50);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading message history: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+        
     }
     
     

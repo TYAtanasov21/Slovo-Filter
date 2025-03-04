@@ -26,6 +26,10 @@
         </None>
         <PackageReference Include="SocketIOClient" Version="3.1.2" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slovo-Filter-DAL\Slovo-Filter-DAL.csproj" />
+    </ItemGroup>
     
 
 </Project>

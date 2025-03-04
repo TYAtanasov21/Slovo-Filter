@@ -3,54 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Slovo_Filter.MainApp"
              xmlns:viewModels="clr-namespace:Slovo_Filter.ViewModel"
+             xmlns:models1="clr-namespace:Slovo_Filter_DAL.Models;assembly=Slovo-Filter-DAL"
              x:DataType="viewModels:MainAppViewModel"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="White">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <VerticalStackLayout Padding="10" Spacing="10" BackgroundColor="Black">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
+        <!-- User selection list -->
+        <Label Text="Select a User" FontSize="Medium" FontAttributes="Bold" TextColor="Aqua"/>
+        <Picker ItemsSource="{Binding Users}" 
+                SelectedItem="{Binding SelectedUser, Mode=TwoWay}" 
+                ItemDisplayBinding="{Binding FirstName}" />
 
-        <ListView ItemsSource="{Binding Users}" SelectionMode="Single"
-                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+        <!-- Loading indicator -->
+        <ActivityIndicator IsRunning="{Binding isLoading}" IsVisible="{Binding isLoading}" />
+        <!-- Message history -->
+        <ListView ItemsSource="{Binding MessageHistory}" HeightRequest="300" BackgroundColor="White">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models1:Message">
                     <ViewCell>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Email}" TextColor="White"/>
-                            <Label Text="{Binding FirstName}" TextColor="White"/>
-                            <Label Text="{Binding LastName}" TextColor="White"/>
-                        </StackLayout>
+                        <Frame Padding="10" CornerRadius="8" BackgroundColor="White">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Content}" TextColor="Black" LineBreakMode="WordWrap" />
+                                <Label Text="{Binding Date, StringFormat='{0:g}'}" 
+                                       FontSize="Small" TextColor="Black" />
+                            </VerticalStackLayout>
+                        </Frame>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackLayout Grid.Column="1" Padding="20">
-            <Label Text="Chat Room" FontSize="24" HorizontalOptions="Center" TextColor="White"/>
-            
-            <!-- Scrollable message list -->
-            <ScrollView HeightRequest="400">
-                <CollectionView ItemsSource="{Binding Messages}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Padding="10" Margin="5" BackgroundColor="#333" CornerRadius="10">
-                                <Label Text="{Binding .}" TextColor="White"/>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </ScrollView>
+        <!-- Message input -->
+        <HorizontalStackLayout Spacing="5">
+            <Entry Text="{Binding CurrentMessage}" 
+                   Placeholder="Type a message..." 
+                   HorizontalOptions="FillAndExpand" />
+            <Button Text="Send" Command="{Binding SendMessageCommand}" />
+        </HorizontalStackLayout>
 
-            <Entry Text="{Binding CurrentMessage}" Placeholder="Enter message..." TextColor="White"/>
-            <Button Text="Send" Command="{Binding SendMessageCommand}"/>
-        </StackLayout>
-    </Grid>
+    </VerticalStackLayout>
+
 </ContentPage>
