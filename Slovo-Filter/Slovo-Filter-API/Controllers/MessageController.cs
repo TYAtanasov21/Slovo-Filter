@@ -19,7 +19,7 @@ namespace Slovo_Filter_API.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreMessage([FromBody] StoreMessageRequest request)
         {
-            Console.WriteLine("Storing messsage in the back-end");
+            Console.WriteLine("Storing messsage in ther back-end");
             if (request.SenderId == 0 || request.ReceiverId == 0 || string.IsNullOrEmpty(request.Content))
             {
                 return BadRequest("SenderId, ReceiverId, and Content are required.");

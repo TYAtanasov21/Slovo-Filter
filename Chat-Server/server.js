@@ -20,7 +20,7 @@ const io = new Server(server, {
 const users = new Map(); // Store userId -> socket.id mapping
 
 // Define the API base URL
-const API_BASE_URL = "https://slovo-filter-back-end-a8abcea3a0hcftge.northeurope-01.azurewebsites.net/api";
+const API_BASE_URL = "http://localhost:5161/api";
 
 // When a user connects
 io.on("connection", (socket) => {
