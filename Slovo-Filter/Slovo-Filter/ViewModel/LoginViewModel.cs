@@ -4,8 +4,6 @@ using Slovo_Filter_BLL.Services;
 using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
-
-
 public class LoginViewModel 
 {
     public User User { get; private set; }

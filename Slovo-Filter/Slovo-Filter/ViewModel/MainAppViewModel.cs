@@ -8,13 +8,17 @@ using Slovo_Filter_DAL.Repositories;
 
 namespace Slovo_Filter.ViewModel;
 
-public class MainAppViewModel
+public class MainAppViewModel : INotifyPropertyChanged
 {
     private readonly SocketService _socketService;
     private readonly UserRepository _userRepository;
     private string _currentMessage;
+    private string _searchQuery;
     public ObservableCollection<string> Messages { get; set; } = new();
     public ObservableCollection<User> Users { get; set; } = new();
+    
+    public ObservableCollection<User> SearchResults { get; set; } = new();
+    public ObservableCollection<User> PreviousChats { get; set; } = new();
 
     public string RecieverId { get; set; } = string.Empty;
     public string UserId { get; set; }
@@ -36,7 +40,6 @@ public class MainAppViewModel
     
 
     
-    //Current user declaration
     private User _currentUser;
     public User CurrentUser
     {
@@ -51,10 +54,10 @@ public class MainAppViewModel
         }
     }
     
-    public string Email => CurrentUser?.Email;
-    public string FirstName => CurrentUser?.FirstName;
+    public string Email => CurrentUser?.Email ?? string.Empty;
+    public string FirstName => CurrentUser?.FirstName ?? string.Empty;
 
-    public string LastName => CurrentUser?.LastName;
+    public string LastName => CurrentUser?.LastName ?? string.Empty;
 
     //Selected user declaration
     private User _selectedUser;
@@ -114,6 +117,18 @@ public class MainAppViewModel
         {
             Console.WriteLine($"Message received from {sender}: {message}");
             Messages.Add($"{sender}: {message}");
+            
+            int senderId = int.Parse(sender);
+            int currentUserID = int.Parse(UserId);
+            var receivedMessage = new Message
+            {
+                SenderId = senderId,
+                Content = message,
+                Date = DateTime.Now,
+                IsFromCurrentUser = senderId == currentUserID
+            };
+            
+            MessageHistory.Add(receivedMessage);
         };
         
         _socketService.OnMessageHistoryReceived += (messages) =>
@@ -130,9 +145,8 @@ public class MainAppViewModel
                 isLoading = false;
                 });
         };
-        
-        CurrentUser = new User();
         LoadUsers();
+        
 
         SendMessageCommand = new Command(SendMessage);
         LoadHistoryCommand = new Command(async () => await LoadMessageHistoryAsync());
@@ -169,6 +183,12 @@ public class MainAppViewModel
         foreach (var user in users)
         {
             Users.Add(user);
+            if (user.Id.ToString() == UserId)
+            {
+                CurrentUser = user;
+                Console.WriteLine($"Current User Loaded: {CurrentUser.FirstName} {CurrentUser.LastName}");
+
+            }
         }
     }
 
@@ -176,7 +196,22 @@ public class MainAppViewModel
     {
         if (!string.IsNullOrWhiteSpace(CurrentMessage) && SelectedUser != null)
         {
+            if (!int.TryParse(UserId, out int senderId) || !int.TryParse(RecieverId, out int receiverId))
+            {
+                Console.WriteLine("Invalid UserId or ReceiverId");
+                return;
+            }
             _socketService.SendMessage(UserId, RecieverId, CurrentMessage);
+            Messages.Add($"You to {SelectedUser.FirstName}: {CurrentMessage}");
+            var sentMessage = new Message
+            {
+                SenderId = int.Parse(UserId),
+                ReceiverId = int.Parse(RecieverId),
+                Content = CurrentMessage,
+                Date = DateTime.Now,
+                IsFromCurrentUser = true
+            };
+            MessageHistory.Add(sentMessage);
             Messages.Add($"You to {SelectedUser.FirstName}: {CurrentMessage}");
             CurrentMessage = string.Empty;
         }

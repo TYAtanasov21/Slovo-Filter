@@ -62,8 +62,6 @@ namespace Slovo_Filter_BLL.Services
 
         static async Task Main()
         {
-            
-            
             string input = Console.ReadLine();
             AIFilter filter = new AIFilter();
             filter.content = input;
