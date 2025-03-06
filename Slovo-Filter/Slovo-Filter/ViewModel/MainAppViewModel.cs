@@ -6,8 +6,6 @@ using System.Windows.Input;
 using Slovo_Filter_BLL.Services;
 using Slovo_Filter_DAL.Models;
 using Slovo_Filter_DAL.Repositories;
-using System.Threading.Tasks;
-using IdentityLookup;
 
 namespace Slovo_Filter.ViewModel
 {
@@ -113,14 +111,29 @@ namespace Slovo_Filter.ViewModel
 
             _socketService.OnMessageHistoryReceived += (messages) =>
             {
-                Microsoft.Maui.Controls.Device.BeginInvokeOnMainThread(() =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    MessageHistory.Clear();
+                    if (!MessageHistory.Any()) 
+                    {
+                        MessageHistory.Clear();
+                    }
+
                     foreach (var message in messages.OrderBy(m => m.Date))
                     {
-                        message.IsFromCurrentUser = message.SenderId.ToString() == UserId;
-                        MessageHistory.Add(message);
+                        var existing = MessageHistory.FirstOrDefault(m => m.Id == message.Id);
+            
+                        if (existing == null)
+                        {
+                            message.IsFromCurrentUser = message.SenderId.ToString() == UserId;
+                            MessageHistory.Add(message);
+                        }
+                        else
+                        {
+                            // Preserve existing AI score
+                            Console.WriteLine($"Preserved score {existing.AiScore} for message ID {existing.Id}");
+                        }
                     }
+
                     isLoading = false;
                 });
             };
@@ -167,33 +180,77 @@ namespace Slovo_Filter.ViewModel
 
         private async Task CheckAndAddMessage(string messageContent, bool isFromCurrentUser)
         {
+            if (string.IsNullOrWhiteSpace(messageContent))
+            {
+                Console.WriteLine("Warning: Empty message received.");
+                return;
+            }
+
             var filter = new AIFilter { content = messageContent };
             var jsonResponse = await filter.AnalyzeContentAsync();
-            Console.WriteLine(jsonResponse + "JSON RESPONSE");
-            var aiResult = JsonSerializer.Deserialize<AiScore>(jsonResponse);
+    
+            Console.WriteLine(jsonResponse + " JSON RESPONSE");
+
+            if (string.IsNullOrWhiteSpace(jsonResponse))
+            {
+                Console.WriteLine("Error: Empty or invalid AI response.");
+                return;
+            }
+
+            AiScore aiResult;
+            try
+            {
+                aiResult = JsonSerializer.Deserialize<AiScore>(jsonResponse);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deserializing AI response: {ex.Message}");
+                return;
+            }
 
             if (aiResult == null)
             {
                 Console.WriteLine("Error: AI result is null.");
                 return;
             }
-            
+
             Console.WriteLine(aiResult.Score.ToString() + " - Score");
+
+            // Ensure UserId and ReceiverId are valid integers
+            if (!int.TryParse(UserId, out int senderId))
+            {
+                Console.WriteLine($"Error: Invalid SenderId '{UserId}'.");
+                return;
+            }
+
+            if (!int.TryParse(RecieverId, out int receiverId))
+            {
+                Console.WriteLine($"Error: Invalid ReceiverId '{RecieverId}'.");
+                return;
+            }
 
             var message = new Message
             {
-                SenderId = int.Parse(UserId),
-                ReceiverId = int.Parse(RecieverId),
+                SenderId = senderId,
+                ReceiverId = receiverId,
                 Content = messageContent,
                 Date = DateTime.Now,
                 IsFromCurrentUser = isFromCurrentUser,
                 AiScore = aiResult.Score,
             };
-
+            Console.WriteLine($"Message created with AiScore: {message.AiScore}");
             MessageHistory.Add(message);
-            await _messageService.StoreMessageAsync(message.SenderId, message.ReceiverId, message.Content,
-                message.AiScore);
+
+            try
+            {
+                await _messageService.StoreMessageAsync(message.SenderId, message.ReceiverId, message.Content, message.AiScore);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error storing message: {ex.Message}");
+            }
         }
+
 
         private async void SendMessage()
         {

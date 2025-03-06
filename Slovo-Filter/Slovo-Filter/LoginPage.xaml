@@ -6,12 +6,20 @@
              x:DataType="viewModels:LoginViewModel"
              BackgroundColor="Black"
              NavigationPage.HasNavigationBar="False">
-
-    <Grid>
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+            
+            <ActivityIndicator 
+                IsRunning="{Binding IsLoading}" 
+                IsVisible="{Binding IsLoading}"
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" 
+                Color="White"
+                WidthRequest="80"
+                HeightRequest="80"/>
 
         <Image Source="login_animation.gif"
                Grid.Column="1"
@@ -22,8 +30,8 @@
 
         <StackLayout Grid.Column="0"
                      Margin="52, 76, 0, 0"
-                     HorizontalOptions="Start"
-                     VerticalOptions="Start">
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" /> 
@@ -71,7 +79,8 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           x:Name = "EmailEntry"/>
+                           x:Name = "EmailEntry"
+                           Text="{Binding Email}"/>
                 </Grid>
                 <Grid Grid.Row = "2"
                       Padding="0, 10, 0, 10">
@@ -103,7 +112,8 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           x:Name = "PasswordEntry"/>
+                           x:Name = "PasswordEntry"
+                           Text = "{Binding Password}"/>
                 </Grid>
                 
 
@@ -132,7 +142,7 @@
                             VerticalOptions="End"
                             CornerRadius="13"
                             FontFamily="RobotoBold"
-                            Clicked = "OnLoginButtonClicked"/>
+                            Command="{Binding LoginCommand}"/>
                 </Grid>
                 
                 <Grid Grid.Row = "4">
@@ -188,23 +198,13 @@
                         HorizontalOptions="Center"
                             Command="{Binding NavigateToRegisterCommand}"
                         />
-                    <Button Grid.Row = "2"
-                            BackgroundColor="Transparent"
-                            Text = "Go to main page DEBUGGING"
-                            Margin="0, 4, 0, 0"
-                            TextColor="Cyan"
-                            FontFamily="RobotoBold"
-                            FontSize = "16"
-                            HorizontalOptions="Center"
-                            Command="{Binding NavigateToMain}"
-                    />
                     
                     
                     <!--TODO- oAuth button here -->
                     
                 </Grid>
                 <Grid Grid.Row = "6">
-                    <!-- TODO- TEXT PLEASEEEEEEEEE -->
+                    <!-- TODO- TEXT PLEASE -->
                 </Grid>
                 </Grid>
             

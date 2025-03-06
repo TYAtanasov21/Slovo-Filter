@@ -43,7 +43,7 @@ namespace Slovo_Filter_DAL.Repositories
         public async Task<List<Message>> GetOfflineMessagesAsync(int receiverId)
         {
             var query = @"
-                SELECT id, senderid, receiverid, content, timestamp, delivered,  aiscore 
+                SELECT id, senderid, receiverid, content, timestamp, delivered, aiscore 
                 FROM messages 
                 WHERE receiverid = @receiverid AND delivered = false;";
 
@@ -65,6 +65,7 @@ namespace Slovo_Filter_DAL.Repositories
                     IsDelivered = Convert.ToBoolean(row["delivered"]),
                     AiScore = row["aiscore"] != DBNull.Value ? Convert.ToInt32(row["aiscore"]) : 0
                 });
+                Console.WriteLine($"Loaded message: {row["content"]} | Score: {row["aiscore"]}");
             }
             return messages;
         }
@@ -92,6 +93,8 @@ namespace Slovo_Filter_DAL.Repositories
 
             foreach (DataRow row in dataTable.Rows)
             {
+                var score = row["aiscore"] != DBNull.Value ? Convert.ToInt32(row["aiscore"]) : 0;
+                Console.WriteLine($"DB Record - ID: {row["id"]}, Content: {row["content"]}, Score: {score}");
                 messages.Add(new Message
                 {
                     Id = Convert.ToInt32(row["id"]),

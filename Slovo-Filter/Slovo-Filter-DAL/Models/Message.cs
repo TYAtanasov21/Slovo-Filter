@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Slovo_Filter_DAL.Models;
 
 public class Message
@@ -9,6 +11,7 @@ public class Message
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public bool IsDelivered { get; set; }
     public bool IsFromCurrentUser { get; set; }
+    [JsonPropertyName("aiScore")]
     public int AiScore { get; set; }
 
 }

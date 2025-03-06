@@ -157,11 +157,11 @@
                                                 ? DateTime.Parse(item["date"].ToString())
                                                 : DateTime.Now,
                                             IsDelivered = item["delivered"]?.Value<bool>() ?? false,
-                                            IsFromCurrentUser = item["senderId"]?.ToString() == _userId.ToString()
+                                            IsFromCurrentUser = item["senderId"]?.ToString() == _userId.ToString(),
+                                            AiScore = item["aiScore"]?.Value<int>() ?? 0,
                                         };
                                         
                                         messages.Add(message);
-                                        Console.WriteLine($"📝 Processed message: {message.Content}");
                                     }
                                     catch (Exception ex)
                                     {
@@ -169,7 +169,6 @@
                                     }
                                 }
                                 
-                                // Notify subscribers with the message history
                                 if (messages.Count > 0)
                                 {
                                     OnMessageHistoryReceived?.Invoke(messages);

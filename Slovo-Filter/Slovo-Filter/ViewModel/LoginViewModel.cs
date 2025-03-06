@@ -2,21 +2,50 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Slovo_Filter_BLL.Services;
 using Slovo_Filter_DAL.Repositories;
+using System.Threading.Tasks;
 
 namespace Slovo_Filter.ViewModel;
-public class LoginViewModel 
+public class LoginViewModel : INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler PropertyChanged;
+    
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        }
+    }
+    
+    private string _email;
+    public string Email
+    {
+        get => _email;
+        set { _email = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Email))); }
+    }
+
+    private string _password;
+    public string Password
+    {
+        get => _password;
+        set { _password = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Password))); }
+    }
+
     public User User { get; private set; }
     private readonly UserRepository _userRepository;
     public ICommand NavigateToRegisterCommand { get; }
-    public ICommand NavigateToMain { get; set; }
+    public ICommand LoginCommand { get; }
 
     public LoginViewModel()
     {
         _userRepository = new UserRepository();
         NavigateToRegisterCommand = new Command(OnNavigateToRegister);
-        NavigateToMain = new Command(OnNavigateToMain);
+        LoginCommand = new Command(async () => await LoginAsync());
     }
+
     private async void OnNavigateToRegister()
     {
         if (Application.Current?.MainPage != null)
@@ -25,16 +54,26 @@ public class LoginViewModel
         }
     }
 
-    private async void OnNavigateToMain()
+    private async Task LoginAsync()
     {
-        Console.WriteLine("OnNavigateToMain");
-        Console.WriteLine(User.Email);
-        if (Application.Current?.MainPage != null)
+        IsLoading = true; // Show loading indicator
+
+        var email = Email; // Assuming you bind these properties
+        var password = Password;
+
+        var (isSuccess, message) = await LoginUserAsync(email, password);
+
+        if (isSuccess)
         {
             await Application.Current.MainPage.Navigation.PushAsync(new MainApp(User));
         }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert("Login Failed", message, "OK");
+        }
+
+        IsLoading = false; // Hide loading indicator
     }
-    
 
     public async Task<(bool, string)> LoginUserAsync(string email, string password)
     {
@@ -49,12 +88,10 @@ public class LoginViewModel
 
             if (isAuthenticated)
             {
-                // Fetch the user's details from the database
                 var user = await _userRepository.GetUserByEmailAsync(email);
-
                 if (user != null)
                 {
-                    User = user;  // Store the logged-in user in the ViewModel
+                    User = user;
                     return (true, "Login Successful");
                 }
                 else

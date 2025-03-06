@@ -12,10 +12,9 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:BoolToMessageColorConverter x:Key="BoolToMessageColorConverter" />
-            <global:AiScoreToColorConverter x:Key="AiScoreToColorConverter" />
-
-        </ResourceDictionary>
+                <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter" />
+                <converters:AiScoreToColorConverter x:Key="AiScoreToColorConverter" />
+            </ResourceDictionary>
     </ContentPage.Resources>
 
     <Grid ColumnDefinitions="2*, 5*"> 
@@ -69,30 +68,57 @@
             <BoxView HeightRequest="1" BackgroundColor="Gray" Margin="10,5"/>
 
             <!-- Messages List -->
-            <ListView ItemsSource="{Binding MessageHistory}" BackgroundColor="#121212" HasUnevenRows="True" HeightRequest="1250">
+            <ListView ItemsSource="{Binding MessageHistory}" 
+                       BackgroundColor="#121212" 
+                       HasUnevenRows="True" 
+                       HeightRequest="1250">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models1:Message">
                         <ViewCell>
-                            <ViewCell.View>
-                                <StackLayout Padding="5" BackgroundColor="{Binding AiScore, Converter={StaticResource AiScoreToColorConverter}}">
-                                    <Label Text="{Binding Content}" TextColor="White" LineBreakMode="WordWrap" />
-                                    <Label Text="{Binding Date, StringFormat='{0:g}'}" FontSize="Small" TextColor="Gray" />
+                            <Frame Padding="10" 
+                                   CornerRadius="10"
+                                   BackgroundColor="{Binding AiScore, Converter={StaticResource AiScoreToColorConverter}}"
+                                   HasShadow="False"
+                                   Margin="5"
+                                   MaximumWidthRequest="250"
+                                   HorizontalOptions="{Binding IsFromCurrentUser, Converter={StaticResource BoolToAlignmentConverter}}">
+
+                                <StackLayout>
+                                    <Label Text="{Binding Content}" TextColor="White" LineBreakMode="WordWrap"/>
+                                    <Label Text="{Binding Date, StringFormat='{0:g}'}" FontSize="Small" TextColor="Gray"/>
                                 </StackLayout>
-                            </ViewCell.View>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
+
+
             <!-- Message Input -->
-            <HorizontalStackLayout Spacing="5" Padding="10">
-                <Entry Text="{Binding CurrentMessage}" 
-                       Placeholder="Type a message..." 
-                       HorizontalOptions="FillAndExpand"
-                       BackgroundColor="#1E1E1E" 
-                       TextColor="White" />
-                <Button Text="Send" Command="{Binding SendMessageCommand}" BackgroundColor="Aqua" TextColor="Black"/>
-            </HorizontalStackLayout>
+            <Frame Padding="5"
+                   CornerRadius="25"
+                   BackgroundColor="#1E1E1E"
+                   Margin="10"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="5" Padding="5">
+                    <Entry Text="{Binding CurrentMessage}" 
+                           Placeholder="Type a message..." 
+                           HorizontalOptions="FillAndExpand"
+                           BackgroundColor="Transparent"
+                           TextColor="White"
+                           FontSize="Medium"
+                           Margin="10,0"/>
+                    <Button Text="➤" 
+                            Command="{Binding SendMessageCommand}" 
+                            BackgroundColor="Aqua" 
+                            TextColor="Black"
+                            FontSize="Large"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            CornerRadius="25"/>
+                </HorizontalStackLayout>
+            </Frame>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
