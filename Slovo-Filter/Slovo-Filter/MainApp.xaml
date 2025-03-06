@@ -6,82 +6,106 @@
              xmlns:models1="clr-namespace:Slovo_Filter_DAL.Models;assembly=Slovo-Filter-DAL"
              xmlns:converters="clr-namespace:Slovo_Filter.Converters"
              xmlns:services="clr-namespace:Slovo_Filter_BLL.Services;assembly=Slovo-Filter-DAL"
-             xmlns:global="clr-namespace:"
              x:DataType="viewModels:MainAppViewModel"
              BackgroundColor="#121212"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <ResourceDictionary>
-                <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter" />
-                <converters:AiScoreToColorConverter x:Key="AiScoreToColorConverter" />
-            </ResourceDictionary>
+            <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter" />
+            <converters:AiScoreToColorConverter x:Key="AiScoreToColorConverter" />
+        </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid ColumnDefinitions="2*, 5*"> 
-        <!-- Left Section (User List) -->
+    <Grid ColumnDefinitions="2*, 5*">
+        <!-- Left Section (Search & Users) -->
         <VerticalStackLayout Padding="15" BackgroundColor="#1E1E1E">
-            
             <!-- Current User Info -->
             <HorizontalStackLayout Spacing="10" Padding="5">
                 <Image Source="user_pic.png" WidthRequest="40" HeightRequest="40" />
                 <VerticalStackLayout>
-                    <Label Text="{Binding CurrentUser.FirstName}" FontSize="Medium" TextColor="White" FontAttributes="Bold"/>
-                    <Label Text="{Binding CurrentUser.LastName}" FontSize="Small" TextColor="Gray"/>
+                    <Label Text="{Binding CurrentUser.FirstName}" 
+                         FontSize="Medium" 
+                         TextColor="White" 
+                         FontAttributes="Bold"/>
+                    <Label Text="{Binding CurrentUser.LastName}" 
+                         FontSize="Small" 
+                         TextColor="Gray"/>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
             <BoxView HeightRequest="1" BackgroundColor="Gray" Margin="10,5"/>
 
-            <!-- User List -->
-            <Label Text="Select a User" FontSize="Medium" FontAttributes="Bold" TextColor="Aqua"/>
-            <Picker ItemsSource="{Binding Users}" 
-                    SelectedItem="{Binding SelectedUser, Mode=TwoWay}" 
-                    ItemDisplayBinding="{Binding FirstName}"
-                    />
+            <!-- Search Bar -->
+            <SearchBar Placeholder="Search users..."
+                      Text="{Binding SearchQuery}"
+                      TextColor="White"
+                      PlaceholderColor="Gray"
+                      BackgroundColor="#252525"
+                      CancelButtonColor="White"
+                      HorizontalOptions="Fill"/>
 
-            <ListView ItemsSource="{Binding Users}" HeightRequest="400" BackgroundColor="#1E1E1E">
-                <ListView.ItemTemplate>
+            <!-- User List -->
+            <CollectionView ItemsSource="{Binding SearchResults}"
+                          SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                          SelectionMode="Single"
+                          VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="services:User">
-                        <ViewCell>
-                            <HorizontalStackLayout Padding="5" Spacing="10">
-                                <Image Source="user_pic.png" WidthRequest="30" HeightRequest="30"/>
-                                <Label Text="{Binding FirstName}" TextColor="White" />
+                        <Grid Padding="10" HeightRequest="60">
+                            <HorizontalStackLayout Spacing="15">
+                                <Image Source="user_pic.png" 
+                                     WidthRequest="40" 
+                                     HeightRequest="40"
+                                     Aspect="AspectFill"/>
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding FirstName}" 
+                                         FontSize="16" 
+                                         TextColor="White"
+                                         FontAttributes="Bold"/>
+                                    <Label Text="{Binding LastName}" 
+                                         FontSize="14" 
+                                         TextColor="Gray"/>
+                                </VerticalStackLayout>
                             </HorizontalStackLayout>
-                        </ViewCell>
+                        </Grid>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
 
-        <!-- Right Section (Messages & Chat) -->
+        <!-- Right Section (Chat) -->
         <VerticalStackLayout Padding="15" BackgroundColor="#121212" Grid.Column="1">
-
-            <!-- Selected User Info (Top) -->
+            <!-- Chat Header -->
             <HorizontalStackLayout Spacing="10" Padding="5">
                 <Image Source="user_pic.png" WidthRequest="40" HeightRequest="40" />
                 <VerticalStackLayout>
-                    <Label Text="{Binding SelectedUser.FirstName}" FontSize="Medium" TextColor="White" FontAttributes="Bold"/>
-                    <Label Text="{Binding SelectedUser.LastName}" FontSize="Small" TextColor="White "/>
+                    <Label Text="{Binding SelectedUser.FirstName}" 
+                         FontSize="Medium" 
+                         TextColor="White" 
+                         FontAttributes="Bold"/>
+                    <Label Text="{Binding SelectedUser.LastName}" 
+                         FontSize="Small" 
+                         TextColor="White"/>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
             <BoxView HeightRequest="1" BackgroundColor="Gray" Margin="10,5"/>
 
             <!-- Messages List -->
-            <ListView ItemsSource="{Binding MessageHistory}" 
-                       BackgroundColor="#121212" 
-                       HasUnevenRows="True" 
-                       HeightRequest="1250">
+            <ListView ItemsSource="{Binding MessageHistory}"
+                           HeightRequest="1250"
+                           HasUnevenRows="True"
+                           BackgroundColor="#121212">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models1:Message">
                         <ViewCell>
-                            <Frame Padding="10" 
-                                   CornerRadius="10"
-                                   BackgroundColor="{Binding AiScore, Converter={StaticResource AiScoreToColorConverter}}"
-                                   HasShadow="False"
-                                   Margin="5"
-                                   MaximumWidthRequest="250"
-                                   HorizontalOptions="{Binding IsFromCurrentUser, Converter={StaticResource BoolToAlignmentConverter}}">
+                        <Frame Padding="10" 
+                               CornerRadius="10"
+                               BackgroundColor="{Binding AiScore, Converter={StaticResource AiScoreToColorConverter}}"
+                               HasShadow="False"
+                               Margin="5"
+                               MaximumWidthRequest="250"
+                               HorizontalOptions="{Binding IsFromCurrentUser, Converter={StaticResource BoolToAlignmentConverter}}">
 
                                 <StackLayout>
                                     <Label Text="{Binding Content}" TextColor="White" LineBreakMode="WordWrap"/>
@@ -93,8 +117,6 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-
-
             <!-- Message Input -->
             <Frame Padding="5"
                    CornerRadius="25"
@@ -103,12 +125,12 @@
                    HasShadow="True">
                 <HorizontalStackLayout Spacing="5" Padding="5">
                     <Entry Text="{Binding CurrentMessage}" 
-                           Placeholder="Type a message..." 
-                           HorizontalOptions="FillAndExpand"
-                           BackgroundColor="Transparent"
-                           TextColor="White"
-                           FontSize="Medium"
-                           Margin="10,0"/>
+                         Placeholder="Type a message..." 
+                         HorizontalOptions="FillAndExpand"
+                         BackgroundColor="Transparent"
+                         TextColor="White"
+                         FontSize="Medium"
+                         Margin="10,0"/>
                     <Button Text="➤" 
                             Command="{Binding SendMessageCommand}" 
                             BackgroundColor="Aqua" 

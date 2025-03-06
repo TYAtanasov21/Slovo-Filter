@@ -14,11 +14,9 @@ namespace Slovo_Filter.ViewModel
         private readonly SocketService _socketService;
         private readonly UserRepository _userRepository;
         private string _currentMessage;
-        private string _searchQuery;
         public ObservableCollection<string> Messages { get; set; } = new();
         public ObservableCollection<User> Users { get; set; } = new();
         
-        public ObservableCollection<User> SearchResults { get; set; } = new();
         public ObservableCollection<User> PreviousChats { get; set; } = new();
 
         public string RecieverId { get; set; } = string.Empty;
@@ -52,6 +50,21 @@ namespace Slovo_Filter.ViewModel
                 OnPropertyChanged(nameof(LastName));
             }
         }
+        
+        private string _searchQuery;
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged();
+                FilterUsers();
+            }
+        }
+        public ObservableCollection<User> SearchResults { get; set; } = new();
+
+
 
         public string Email => CurrentUser?.Email ?? string.Empty;
         public string FirstName => CurrentUser?.FirstName ?? string.Empty;
@@ -63,21 +76,17 @@ namespace Slovo_Filter.ViewModel
             get => _selectedUser;
             set
             {
-                if (_selectedUser != value)
+                if (_selectedUser == value) return;
+                
+                _selectedUser = value;
+                RecieverId = _selectedUser?.Id.ToString() ?? string.Empty;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(RecieverId));
+                
+                if (_selectedUser != null)
                 {
-                    _selectedUser = value;
-                    RecieverId = _selectedUser?.Id.ToString() ?? string.Empty;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(RecieverId));
-
-                    if (_selectedUser != null)
-                    {
-                        LoadMessageHistoryAsync().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        MessageHistory.Clear();
-                    }
+                    MessageHistory.Clear();
+                    LoadMessageHistoryAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -173,11 +182,37 @@ namespace Slovo_Filter.ViewModel
                 if (user.Id.ToString() == UserId)
                 {
                     CurrentUser = user;
-                    Console.WriteLine($"Current User Loaded: {CurrentUser.FirstName} {CurrentUser.LastName}");
+                }
+            }
+            FilterUsers();
+        }
+
+        private void FilterUsers()
+        {
+            SearchResults.Clear();
+    
+            bool hasSearchQuery = !string.IsNullOrWhiteSpace(SearchQuery);
+            string searchTerm = hasSearchQuery ? SearchQuery.Trim() : string.Empty;
+
+            foreach (User user in Users)
+            {
+                // Skip current user
+                if (user.Id.ToString() == UserId) continue;
+
+                // Check search match
+                bool matchesSearch = true;
+                if (hasSearchQuery)
+                {
+                    string fullName = $"{user.FirstName} {user.LastName}";
+                    matchesSearch = fullName.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+
+                if (matchesSearch)
+                {
+                    SearchResults.Add(user);
                 }
             }
         }
-
         private async Task CheckAndAddMessage(string messageContent, bool isFromCurrentUser)
         {
             if (string.IsNullOrWhiteSpace(messageContent))
