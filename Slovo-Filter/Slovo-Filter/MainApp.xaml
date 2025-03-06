@@ -6,13 +6,15 @@
              xmlns:models1="clr-namespace:Slovo_Filter_DAL.Models;assembly=Slovo-Filter-DAL"
              xmlns:converters="clr-namespace:Slovo_Filter.Converters"
              xmlns:services="clr-namespace:Slovo_Filter_BLL.Services;assembly=Slovo-Filter-DAL"
+             xmlns:global="clr-namespace:"
              x:DataType="viewModels:MainAppViewModel"
              BackgroundColor="#121212"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter" />
             <converters:BoolToMessageColorConverter x:Key="BoolToMessageColorConverter" />
+            <global:AiScoreToColorConverter x:Key="AiScoreToColorConverter" />
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -67,12 +69,12 @@
             <BoxView HeightRequest="1" BackgroundColor="Gray" Margin="10,5"/>
 
             <!-- Messages List -->
-            <ListView ItemsSource="{Binding MessageHistory}" HeightRequest="500" BackgroundColor="#121212">
+            <ListView ItemsSource="{Binding MessageHistory}" BackgroundColor="#121212" HasUnevenRows="True" HeightRequest="1250">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models1:Message">
                         <ViewCell>
                             <ViewCell.View>
-                                <StackLayout Padding="5" BackgroundColor="{Binding IsFromCurrentUser, Converter={StaticResource BoolToMessageColorConverter}}">
+                                <StackLayout Padding="5" BackgroundColor="{Binding AiScore, Converter={StaticResource AiScoreToColorConverter}}">
                                     <Label Text="{Binding Content}" TextColor="White" LineBreakMode="WordWrap" />
                                     <Label Text="{Binding Date, StringFormat='{0:g}'}" FontSize="Small" TextColor="Gray" />
                                 </StackLayout>

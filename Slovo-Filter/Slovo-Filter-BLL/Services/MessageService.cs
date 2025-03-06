@@ -21,4 +21,10 @@ public class MessageService
 
         return await _messageRepository.GetMessageHistoryAsync(user1IdInt, user2IdInt, limit);
     }
+    
+    public async Task<int> StoreMessageAsync(int senderId, int receiverId, string content, int aiScore)
+    {
+        return await _messageRepository.StoreMessageAsync(senderId, receiverId, content, aiScore);
+    }
+
 }

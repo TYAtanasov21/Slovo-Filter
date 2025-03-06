@@ -8,7 +8,7 @@ public class Message
     public string Content { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public bool IsDelivered { get; set; }
-    public bool IsRead { get; set; }
     public bool IsFromCurrentUser { get; set; }
+    public int AiScore { get; set; }
 
 }

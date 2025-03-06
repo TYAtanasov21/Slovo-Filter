@@ -15,11 +15,11 @@ namespace Slovo_Filter_DAL.Repositories
             _context = new dbContext();
         }
         
-        public async Task<int> StoreMessageAsync(int sender, int receiver, string messageContent)
+        public async Task<int> StoreMessageAsync(int sender, int receiver, string messageContent, int aiScore)
         {
             var query = @"
-                    INSERT INTO messages (senderid, receiverid, content, timestamp, delivered)
-                    VALUES (@senderid, @receiverid, @content, @timestamp, false) 
+                    INSERT INTO messages (senderid, receiverid, content, timestamp, delivered, aiscore)
+                    VALUES (@senderid, @receiverid, @content, @timestamp, false, @aiScore) 
                     RETURNING id;";
                 
             var parameters = new Dictionary<string, object>
@@ -27,7 +27,8 @@ namespace Slovo_Filter_DAL.Repositories
                 { "@senderid", sender },
                 { "@receiverid", receiver },
                 { "@content", messageContent },
-                { "@timestamp", DateTime.UtcNow }
+                { "@timestamp", DateTime.UtcNow },
+                { "@aiScore", aiScore }
             };
 
             var dataTable = await _context.ExecuteQueryAsync(query, parameters);
@@ -41,7 +42,11 @@ namespace Slovo_Filter_DAL.Repositories
         
         public async Task<List<Message>> GetOfflineMessagesAsync(int receiverId)
         {
-            var query = "SELECT id, senderid, receiverid, content, timestamp, delivered FROM messages WHERE receiverid = @receiverid AND delivered = false;";
+            var query = @"
+                SELECT id, senderid, receiverid, content, timestamp, delivered,  aiscore 
+                FROM messages 
+                WHERE receiverid = @receiverid AND delivered = false;";
+
             var parameters = new Dictionary<string, object> { { "@receiverid", receiverId } };
 
             var dataTable = await _context.ExecuteQueryAsync(query, parameters);
@@ -57,7 +62,8 @@ namespace Slovo_Filter_DAL.Repositories
                     ReceiverId = Convert.ToInt32(row["receiverid"]),
                     Content = row["content"].ToString(),
                     Date = Convert.ToDateTime(row["timestamp"]),
-                    IsDelivered = Convert.ToBoolean(row["delivered"])
+                    IsDelivered = Convert.ToBoolean(row["delivered"]),
+                    AiScore = row["aiscore"] != DBNull.Value ? Convert.ToInt32(row["aiscore"]) : 0
                 });
             }
             return messages;
@@ -66,15 +72,15 @@ namespace Slovo_Filter_DAL.Repositories
         public async Task<List<Message>> GetMessageHistoryAsync(int user1Id, int user2Id, int limit)
         {
             var query = @"
-                SELECT id, senderid, receiverid, content, timestamp, delivered 
+                SELECT id, senderid, receiverid, content, timestamp, delivered, aiscore 
                 FROM messages 
                 WHERE (senderid = @user1id AND receiverid = @user2id) 
                    OR (senderid = @user2id AND receiverid = @user1id)
                 ORDER BY timestamp DESC
                 LIMIT @limit;";
-                
-            var parameters = new Dictionary<string, object> 
-            { 
+
+            var parameters = new Dictionary<string, object>
+            {
                 { "@user1id", user1Id },
                 { "@user2id", user2Id },
                 { "@limit", limit }
@@ -93,7 +99,8 @@ namespace Slovo_Filter_DAL.Repositories
                     ReceiverId = Convert.ToInt32(row["receiverid"]),
                     Content = row["content"].ToString(),
                     Date = Convert.ToDateTime(row["timestamp"]),
-                    IsDelivered = Convert.ToBoolean(row["delivered"])
+                    IsDelivered = Convert.ToBoolean(row["delivered"]),
+                    AiScore = row["aiscore"] != DBNull.Value ? Convert.ToInt32(row["aiscore"]) : 0
                 });
             }
             return messages;

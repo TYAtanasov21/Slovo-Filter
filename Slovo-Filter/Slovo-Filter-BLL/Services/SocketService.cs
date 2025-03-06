@@ -157,7 +157,6 @@
                                                 ? DateTime.Parse(item["date"].ToString())
                                                 : DateTime.Now,
                                             IsDelivered = item["delivered"]?.Value<bool>() ?? false,
-                                            IsRead = item["isRead"]?.Value<bool>() ?? false,
                                             IsFromCurrentUser = item["senderId"]?.ToString() == _userId.ToString()
                                         };
                                         

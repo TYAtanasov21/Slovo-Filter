@@ -51,6 +51,7 @@ namespace Slovo_Filter_BLL.Services
                     .GetProperty("message")
                     .GetProperty("content")
                     .GetString();
+                Console.WriteLine(messageContent);
                 return messageContent;
             }
             catch (HttpRequestException e)
@@ -58,15 +59,6 @@ namespace Slovo_Filter_BLL.Services
                 Console.WriteLine($"Request error: {e.Message}");
                 return e.Message;
             }
-        }
-
-        static async Task Main()
-        {
-            string input = Console.ReadLine();
-            AIFilter filter = new AIFilter();
-            filter.content = input;
-            Console.InputEncoding = Encoding.UTF8;
-            Console.WriteLine(await filter.AnalyzeContentAsync());
         }
     }
 }

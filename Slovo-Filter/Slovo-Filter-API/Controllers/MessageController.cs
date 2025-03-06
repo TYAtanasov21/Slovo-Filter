@@ -19,13 +19,13 @@ namespace Slovo_Filter_API.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreMessage([FromBody] StoreMessageRequest request)
         {
-            Console.WriteLine("Storing messsage in ther back-end");
+            Console.WriteLine("Storing message in the back-end");
             if (request.SenderId == 0 || request.ReceiverId == 0 || string.IsNullOrEmpty(request.Content))
             {
                 return BadRequest("SenderId, ReceiverId, and Content are required.");
             }
 
-            var messageId = await _messageRepository.StoreMessageAsync(request.SenderId, request.ReceiverId, request.Content);
+            var messageId = await _messageRepository.StoreMessageAsync(request.SenderId, request.ReceiverId, request.Content, request.AiScore);
 
             if (messageId > 0)
                 return Ok(new { MessageId = messageId });
@@ -60,7 +60,6 @@ namespace Slovo_Filter_API.Controllers
             }
         }
 
-
         // Mark a message as delivered
         [HttpPut("{messageId}/deliver")]
         public async Task<IActionResult> MarkAsDelivered(int messageId)
@@ -81,5 +80,6 @@ namespace Slovo_Filter_API.Controllers
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
         public string Content { get; set; }
+        public int AiScore { get; set; } // Added AI score field
     }
 }
