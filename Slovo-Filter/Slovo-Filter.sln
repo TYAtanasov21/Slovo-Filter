@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slovo-Filter-BLL", "Slovo-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slovo-Filter-DAL", "Slovo-Filter-DAL\Slovo-Filter-DAL.csproj", "{B3357DE0-33FA-44C6-A8A7-C3BE854D2F2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slovo-Filter-API", "Slovo-Filter-API\Slovo-Filter-API.csproj", "{8CC407B4-2609-45AE-8400-E56F27E7570E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B3357DE0-33FA-44C6-A8A7-C3BE854D2F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3357DE0-33FA-44C6-A8A7-C3BE854D2F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3357DE0-33FA-44C6-A8A7-C3BE854D2F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC407B4-2609-45AE-8400-E56F27E7570E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC407B4-2609-45AE-8400-E56F27E7570E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC407B4-2609-45AE-8400-E56F27E7570E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC407B4-2609-45AE-8400-E56F27E7570E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

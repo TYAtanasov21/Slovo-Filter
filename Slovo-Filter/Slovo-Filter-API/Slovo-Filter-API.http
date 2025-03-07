@@ -1,0 +1,4 @@
+@Slovo_Filter_API_HostAddress = http://localhost:5161
+
+GET {{Slovo_Filter_API_HostAddress}}/messages/{receiverId}
+Accept: application/json

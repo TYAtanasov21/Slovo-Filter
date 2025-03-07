@@ -40,7 +40,7 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\logo.png" Color="#512BD4" />
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -54,6 +54,9 @@
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
+    
+
+
 
     <ItemGroup>
         <PackageReference Include="Azure.Identity" Version="1.13.2" />
@@ -74,9 +77,11 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
         <PackageReference Include="SocketIOClient" Version="3.1.2" />
         <PackageReference Include="SocketIoClientDotNet" Version="1.0.2-beta1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Slovo-Filter-BLL\Slovo-Filter-BLL.csproj" />
       <ProjectReference Include="..\Slovo-Filter-DAL\Slovo-Filter-DAL.csproj" />
     </ItemGroup>
 

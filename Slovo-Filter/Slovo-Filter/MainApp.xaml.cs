@@ -21,4 +21,15 @@ public partial class MainApp : ContentPage
         Console.WriteLine($"Logged in as: {user.Email}");
         Console.WriteLine($"User ID is: {user.Id}");
     }
+    private void OnMessageEntryCompleted(object sender, EventArgs e)
+    {
+        if (BindingContext is MainAppViewModel vm)
+        {
+            if (vm.SendMessageCommand.CanExecute(null))
+            {
+                vm.SendMessageCommand.Execute(null);
+            }
+        }
+    }
+    
 }

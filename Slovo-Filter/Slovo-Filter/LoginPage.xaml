@@ -6,12 +6,20 @@
              x:DataType="viewModels:LoginViewModel"
              BackgroundColor="Black"
              NavigationPage.HasNavigationBar="False">
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+            
+        <ActivityIndicator 
+            IsRunning="{Binding IsLoading}" 
+            IsVisible="{Binding IsLoading}"
+            HorizontalOptions="Center" 
+            VerticalOptions="Center" 
+            Color="White"
+            WidthRequest="80"
+            HeightRequest="80"/>
 
         <Image Source="login_animation.gif"
                Grid.Column="1"
@@ -22,8 +30,8 @@
 
         <StackLayout Grid.Column="0"
                      Margin="52, 76, 0, 0"
-                     HorizontalOptions="Start"
-                     VerticalOptions="Start">
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" /> 
@@ -39,26 +47,23 @@
                        FontSize="{OnPlatform MacCatalyst='40', WinUI='40' }"
                        HorizontalOptions="Start"
                        TextColor="White"
-                       Padding="3, 4, 3, 95 "
-                       FontFamily="RobotoExtraBold"
-                       />
+                       Padding="3, 4, 3, 70 "
+                       FontFamily="RobotoExtraBold"/>
                 
-                <Grid Grid.Row = "1">
+                <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     
-                    <Label 
-                        Grid.Row = "0"
-                        Text = "Email"
-                        FontSize = "20"
-                        HorizontalOptions="Start"
-                        TextColor="White"
-                        Padding="0,0,0, 10"
-                        FontFamily="RobotoMedium"
-                           />
-                    <Entry Grid.Row = "1"
+                    <Label Grid.Row="0"
+                           Text="Email"
+                           FontSize="20"
+                           HorizontalOptions="Start"
+                           TextColor="White"
+                           Padding="0,0,0,10"
+                           FontFamily="RobotoMedium"/>
+                    <Entry Grid.Row="1"
                            Placeholder="hello@company.com"
                            FontSize="20"
                            BackgroundColor="Black"
@@ -71,25 +76,23 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           x:Name = "EmailEntry"/>
+                           x:Name="EmailEntry"
+                           Text="{Binding Email}"/>
                 </Grid>
-                <Grid Grid.Row = "2"
-                      Padding="0, 10, 0, 10">
+                <Grid Grid.Row="2" Padding="0,10,0,10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     
-                    <Label 
-                        Grid.Row = "0"
-                        Text = "Password"
-                        FontSize = "20"
-                        HorizontalOptions="Start"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        Padding="0,0,0, 10"
-                        FontFamily="RobotoMedium"
-                    />
+                    <Label Grid.Row="0"
+                           Text="Password"
+                           FontSize="20"
+                           HorizontalOptions="Start"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           Padding="0,0,0,10"
+                           FontFamily="RobotoMedium"/>
                     <Entry Grid.Row="1"
                            Placeholder="********"
                            FontSize="20"
@@ -103,14 +106,14 @@
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
                            FontFamily="RobotoMedium"
-                           x:Name = "PasswordEntry"/>
+                           x:Name="PasswordEntry"
+                           Text="{Binding Password}"/>
                 </Grid>
                 
-
-                <Grid Grid.Row = "3">
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
                             Text="Forgot Password?"
@@ -132,82 +135,92 @@
                             VerticalOptions="End"
                             CornerRadius="13"
                             FontFamily="RobotoBold"
-                            Clicked = "OnLoginButtonClicked"/>
+                            Command="{Binding LoginCommand}"/>
                 </Grid>
                 
-                <Grid Grid.Row = "4">
+                <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width = "40*"></ColumnDefinition>
-                        <ColumnDefinition Width = "20*"></ColumnDefinition>
-                        <ColumnDefinition Width = "40*"></ColumnDefinition>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="20*" />
+                        <ColumnDefinition Width="40*" />
                     </Grid.ColumnDefinitions>
                     
-                    <BoxView 
-                        Grid.Column="0"
-                        HeightRequest="1" 
-                        HorizontalOptions="FillAndExpand" 
-                        BackgroundColor="White" 
-                        />
-                    <Label 
-                        Grid.Column="1"
-                        Text = "OR"
-                        FontSize = "18"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        FontFamily="RobotoMedium"
-                        />
-                    <BoxView 
-                        Grid.Column="2"
-                        HeightRequest="1" 
-                        HorizontalOptions="FillAndExpand" 
-                        BackgroundColor="White" 
-                        Margin="0,34"
-                    />
+                    <BoxView Grid.Column="0"
+                             HeightRequest="1" 
+                             HorizontalOptions="FillAndExpand" 
+                             BackgroundColor="White"/>
+                    <Label Grid.Column="1"
+                           Text="OR"
+                           FontSize="18"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           FontFamily="RobotoMedium"/>
+                    <BoxView Grid.Column="2"
+                             HeightRequest="1" 
+                             HorizontalOptions="FillAndExpand" 
+                             BackgroundColor="White"
+                             Margin="0,34"/>
                 </Grid>
-                <Grid Grid.Row = "5">
+                
+                <Grid Grid.Row="5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label
-                        Text = "You don't have an account?"
-                        Margin = "0, 30, 0, 0"
-                        TextColor="#7A7A7A"
-                        FontFamily="RobotoRegular"
-                        FontSize = "17"
-                        HorizontalOptions="Center"
-                        ></Label>
-                    <Button Grid.Row = "1"
+                    <Label Grid.Row="0"
+                           Text="You don't have an account?"
+                           Margin="0,30,0,0"
+                           TextColor="#7A7A7A"
+                           FontFamily="RobotoRegular"
+                           FontSize="17"
+                           HorizontalOptions="Center"/>
+                    <Button Grid.Row="1"
                             BackgroundColor="Transparent"
-                        Text = "Continue with email"
-                        Margin="0, 4, 0, 0"
-                        TextColor="#F7586C"
-                        FontFamily="RobotoBold"
-                        FontSize = "16"
-                        HorizontalOptions="Center"
-                            Command="{Binding NavigateToRegisterCommand}"
-                        />
-                    <Button Grid.Row = "2"
-                            BackgroundColor="Transparent"
-                            Text = "Go to main page DEBUGGING"
-                            Margin="0, 4, 0, 0"
-                            TextColor="Cyan"
+                            Text="Continue with email"
+                            Margin="0,4,0,10"
+                            TextColor="#F7586C"
                             FontFamily="RobotoBold"
-                            FontSize = "16"
+                            FontSize="16"
                             HorizontalOptions="Center"
-                            Command="{Binding NavigateToMain}"
-                    />
-                    
-                    
-                    <!--TODO- oAuth button here -->
-                    
+                            Command="{Binding NavigateToRegisterCommand}"/>
+                    <!-- New Google OAuth button -->
+                    <Grid Grid.Row="2">
+                        <Frame BackgroundColor="#181818"
+                                     HorizontalOptions="Center"
+                                     HeightRequest="50"
+                                     WidthRequest="300"
+                                     CornerRadius="25"
+                                     BorderColor="#181818"
+                                     HasShadow="True"
+                                     Padding="8">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GoogleLoginCommand}"/>
+                            </Frame.GestureRecognizers>
+        
+                            <HorizontalStackLayout Spacing="15" 
+                                                   HorizontalOptions="Center" 
+                                                   VerticalOptions="Center">
+                                <Image Source="google_logo.png" 
+                                       WidthRequest="35" 
+                                       HeightRequest="35"
+                                       VerticalOptions="Center" />
+                                <Label Text="Continue with Google"
+                                       TextColor="White"
+                                       FontFamily="RobotoMedium"
+                                       FontSize="16"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </Grid>
+
+
                 </Grid>
-                <Grid Grid.Row = "6">
-                    <!-- TODO- TEXT PLEASEEEEEEEEE -->
+                
+                <Grid Grid.Row="6">
+                    <!-- Additional content or text can go here -->
                 </Grid>
-                </Grid>
-            
+            </Grid>
         </StackLayout>
     </Grid>
 </ContentPage>
