@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Windows.Input;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.RegularExpressions;
 using Slovo_Filter_BLL.Services;
 using Slovo_Filter_DAL.Models;
 using Slovo_Filter_DAL.Repositories;
@@ -11,7 +12,7 @@ namespace Slovo_Filter.ViewModel
     public class LoginViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         private bool _isLoading;
         public bool IsLoading
         {
@@ -22,7 +23,7 @@ namespace Slovo_Filter.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
             }
         }
-        
+
         private string _email;
         public string Email
         {
@@ -67,6 +68,15 @@ namespace Slovo_Filter.ViewModel
             var email = Email;
             var password = Password;
 
+            // Validate email and password before attempting to login
+            var validationMessage = ValidateLogin(email, password);
+            if (validationMessage != null)
+            {
+                IsLoading = false; // Hide loading indicator
+                await Application.Current.MainPage.DisplayAlert("Validation Failed", validationMessage, "OK");
+                return;
+            }
+
             var (isSuccess, message) = await LoginUserAsync(email, password);
 
             if (isSuccess)
@@ -79,6 +89,30 @@ namespace Slovo_Filter.ViewModel
             }
 
             IsLoading = false; // Hide loading indicator
+        }
+
+        private string ValidateLogin(string email, string password)
+        {
+            // Check if email is valid
+            if (!IsValidEmail(email))
+            {
+                return "Please enter a valid email address.";
+            }
+
+            // Check if password length is at least 8 characters
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            {
+                return "Password must be at least 8 characters long.";
+            }
+
+            return null;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            // Use regex to check if the email format is valid
+            var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, emailPattern);
         }
 
         public async Task<(bool, string)> LoginUserAsync(string email, string password)
