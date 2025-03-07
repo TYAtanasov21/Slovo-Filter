@@ -31,7 +31,7 @@ namespace Slovo_Filter_BLL.Services
                         ""content"": ""{_content}""
                     }}
                 ],
-                ""max_tokens"": 100,
+                ""max_tokens"": 200,
                 ""temperature"": 0.7
             }}";
 
