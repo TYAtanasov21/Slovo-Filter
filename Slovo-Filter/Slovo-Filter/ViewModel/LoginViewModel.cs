@@ -62,17 +62,15 @@ namespace Slovo_Filter.ViewModel
 
         private async Task LoginAsync()
         {
-            // Show loading indicator
             IsLoading = true;
 
             var email = Email;
             var password = Password;
 
-            // Validate email and password before attempting to login
             var validationMessage = ValidateLogin(email, password);
             if (validationMessage != null)
             {
-                IsLoading = false; // Hide loading indicator
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert("Validation Failed", validationMessage, "OK");
                 return;
             }
@@ -88,18 +86,16 @@ namespace Slovo_Filter.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Login Failed", message, "OK");
             }
 
-            IsLoading = false; // Hide loading indicator
+            IsLoading = false; 
         }
 
         private string ValidateLogin(string email, string password)
         {
-            // Check if email is valid
             if (!IsValidEmail(email))
             {
                 return "Please enter a valid email address.";
             }
 
-            // Check if password length is at least 8 characters
             if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
             {
                 return "Password must be at least 8 characters long.";
@@ -110,7 +106,6 @@ namespace Slovo_Filter.ViewModel
 
         private bool IsValidEmail(string email)
         {
-            // Use regex to check if the email format is valid
             var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
         }

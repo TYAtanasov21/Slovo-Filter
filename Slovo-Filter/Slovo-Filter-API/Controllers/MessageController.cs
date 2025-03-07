@@ -15,7 +15,6 @@ namespace Slovo_Filter_API.Controllers
             _messageRepository = new MessageRepository();
         }
 
-        // Store a new message
         [HttpPost]
         public async Task<IActionResult> StoreMessage([FromBody] StoreMessageRequest request)
         {
@@ -33,17 +32,15 @@ namespace Slovo_Filter_API.Controllers
             return StatusCode(500, "Failed to store message.");
         }
 
-        // Get all unread messages for a user
         [HttpGet("unread/{receiverId}")]
         public async Task<IActionResult> GetUnreadMessages(int receiverId)
         {
             Console.WriteLine("Getting unread messages");
             var messages = await _messageRepository.GetOfflineMessagesAsync(receiverId);
 
-            return Ok(messages); // Return empty array instead of 404 when no messages
+            return Ok(messages);
         }
         
-        // Get message history between two users
         [HttpGet("history")]
         public async Task<IActionResult> GetMessageHistory([FromQuery] int user1Id, [FromQuery] int user2Id, [FromQuery] int limit = 50)
         {
@@ -60,7 +57,6 @@ namespace Slovo_Filter_API.Controllers
             }
         }
 
-        // Mark a message as delivered
         [HttpPut("{messageId}/deliver")]
         public async Task<IActionResult> MarkAsDelivered(int messageId)
         {
@@ -74,12 +70,11 @@ namespace Slovo_Filter_API.Controllers
         }
     }
 
-    // Request model for storing a message
     public class StoreMessageRequest
     {
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
         public string Content { get; set; }
-        public int AiScore { get; set; } // Added AI score field
+        public int AiScore { get; set; } 
     }
 }

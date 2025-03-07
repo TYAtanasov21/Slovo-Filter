@@ -138,7 +138,6 @@ namespace Slovo_Filter.ViewModel
                         }
                         else
                         {
-                            // Preserve existing AI score
                             Console.WriteLine($"Preserved score {existing.AiScore} for message ID {existing.Id}");
                         }
                     }
@@ -251,7 +250,6 @@ namespace Slovo_Filter.ViewModel
 
             Console.WriteLine(aiResult.Score.ToString() + " - Score");
 
-            // Ensure UserId and ReceiverId are valid integers
             if (!int.TryParse(UserId, out int senderId))
             {
                 Console.WriteLine($"Error: Invalid SenderId '{UserId}'.");

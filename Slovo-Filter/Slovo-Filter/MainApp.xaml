@@ -21,7 +21,7 @@
         <VerticalStackLayout Padding="15" BackgroundColor="#1E1E1E">
             <!-- Current User Info -->
             <HorizontalStackLayout Spacing="10" Padding="5">
-                <Image Source="user_pic.png" WidthRequest="40" HeightRequest="40" />
+                <Image Source="user_pic1.png" WidthRequest="40" HeightRequest="40" />
                 <VerticalStackLayout>
                     <Label Text="{Binding CurrentUser.FirstName}" 
                          FontSize="Medium" 
@@ -53,10 +53,9 @@
                     <DataTemplate x:DataType="services:User">
                         <Grid Padding="10" HeightRequest="60">
                             <HorizontalStackLayout Spacing="15">
-                                <Image Source="user_pic.png" 
+                                <Image Source="user_pic2.png" 
                                      WidthRequest="40" 
-                                     HeightRequest="40"
-                                     Aspect="AspectFill"/>
+                                     HeightRequest="40"/>
                                 <VerticalStackLayout VerticalOptions="Center">
                                     <Label Text="{Binding FirstName}" 
                                          FontSize="16" 
@@ -77,7 +76,7 @@
         <VerticalStackLayout Padding="15" BackgroundColor="#121212" Grid.Column="1">
             <!-- Chat Header -->
             <HorizontalStackLayout Spacing="10" Padding="5">
-                <Image Source="user_pic.png" WidthRequest="40" HeightRequest="40" />
+                <Image Source="user_pic3.png" WidthRequest="40" HeightRequest="40" />
                 <VerticalStackLayout>
                     <Label Text="{Binding SelectedUser.FirstName}" 
                          FontSize="Medium" 
@@ -117,30 +116,52 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <!-- Message Input -->
-            <Frame Padding="5"
-                   CornerRadius="25"
-                   BackgroundColor="#1E1E1E"
-                   Margin="10"
-                   HasShadow="True">
-                <HorizontalStackLayout Spacing="5" Padding="5">
-                    <Entry Text="{Binding CurrentMessage}" 
-                         Placeholder="Type a message..." 
-                         HorizontalOptions="FillAndExpand"
-                         BackgroundColor="Transparent"
-                         TextColor="White"
-                         FontSize="Medium"
-                         Margin="10,0"/>
-                    <Button Text="➤" 
-                            Command="{Binding SendMessageCommand}" 
-                            BackgroundColor="Aqua" 
-                            TextColor="Black"
-                            FontSize="Large"
-                            WidthRequest="50"
-                            HeightRequest="50"
-                            CornerRadius="25"/>
-                </HorizontalStackLayout>
-            </Frame>
+            <!-- Message Input Section -->
+            <Grid Grid.Row="2" 
+                  Padding="15, 10"
+                  BackgroundColor="#1E1E1E"
+                  ColumnDefinitions="*,Auto"
+                  RowDefinitions="Auto"
+                  VerticalOptions="End">
+    
+                <!-- Message Entry -->
+                <Frame Grid.Column="0"
+                       CornerRadius="25"
+                       BackgroundColor="#252525"
+                       HasShadow="False"
+                       Padding="15,0"
+                       VerticalOptions="Center"
+                       HeightRequest="50">
+                    <Entry x:Name="MessageEntry"
+                           Text="{Binding CurrentMessage}" 
+                           Placeholder="Type a message..."
+                           PlaceholderColor="#666666"
+                           TextColor="White"
+                           FontSize="16"
+                           BackgroundColor="Transparent"
+                           VerticalOptions="Center"
+                           ClearButtonVisibility="WhileEditing"
+                           Completed="OnMessageEntryCompleted"/>
+                </Frame>
+
+                <!-- Send Button -->
+                <Button Grid.Column="1"
+                        Command="{Binding SendMessageCommand}"
+                        BackgroundColor="#6821EE"
+                        WidthRequest="80"
+                        HeightRequest="50"
+                        CornerRadius="25"
+                        Margin="10,0,0,0"
+                        VerticalOptions="Center"
+                        Text = "Send"
+                        TextColor="White">
+                    <Button.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="4"/>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

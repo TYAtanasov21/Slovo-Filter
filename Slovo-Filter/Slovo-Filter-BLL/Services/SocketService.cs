@@ -49,13 +49,11 @@
                         RegisterHistoryListener();
                     };
 
-                    // Event: Disconnected
                     _client.OnDisconnected += (sender, e) =>
                     {
                         Console.WriteLine("Disconnected from server: " + e);
                     };
 
-                    // Event: Connection Error
                     _client.OnError += (sender, e) =>
                     {
                         Console.WriteLine("Connection error: " + e);
@@ -76,18 +74,15 @@
                     {
                         Console.WriteLine($"📨 Raw data received: {response}");
 
-                        // Convert the response to string (assuming it's a JSON array)
                         string socketData = response.ToString();
                         Console.WriteLine($"🔍 Raw string data: {socketData}");
 
                         if (!string.IsNullOrEmpty(socketData))
                         {
-                            // Deserialize the response into a list of MessageData objects
                             var messageList = JsonConvert.DeserializeObject<List<MessageData>>(socketData);
 
                             if (messageList != null && messageList.Count > 0)
                             {
-                                // Get the first message in the list
                                 var firstMessage = messageList[0];
                                 var sender = firstMessage?.Sender;
                                 var message = firstMessage?.Message;
@@ -135,12 +130,10 @@
                         var outerArray = JsonConvert.DeserializeObject<List<List<JObject>>>(socketData);
                         if (!string.IsNullOrEmpty(socketData))
                         {
-                            // Deserialize the history data
                             var jsonHistory = outerArray[0];
                             
                             if (jsonHistory != null && jsonHistory.Count > 0)
                             {
-                                // Convert to our Message model
                                 var messages = new List<Message>();
                                 
                                 foreach (var item in jsonHistory)

@@ -43,10 +43,9 @@ namespace Slovo_Filter_DAL.Repositories
             if (emailCheckTable.Rows.Count > 0)
             {
                 Console.WriteLine("Duplicate email found: " + email);
-                return -1; // Email already exists
+                return -1;
             }
 
-            // Insert the user and return the generated ID
             var query = @"
                 INSERT INTO users (firstname, lastname, email, password)
                 VALUES (@firstname, @lastname, @email, @password)
@@ -66,7 +65,7 @@ namespace Slovo_Filter_DAL.Repositories
                 return Convert.ToInt32(dataTable.Rows[0]["id"]);
             }
 
-            return -1; // Failed to register user
+            return -1;
         }
 
 
@@ -75,7 +74,6 @@ namespace Slovo_Filter_DAL.Repositories
             var query = "SELECT id, firstname, lastname, password FROM users WHERE email = @Email";
             var parameters = new Dictionary<string, object> {{"@Email", email}};
     
-            // Log the query for debugging purposes
             Console.WriteLine($"Executing query: {query}");
     
             var dataTable = await _context.ExecuteQueryAsync(query, parameters);
@@ -83,15 +81,13 @@ namespace Slovo_Filter_DAL.Repositories
             if (dataTable.Rows.Count == 0)
             {
                 Console.WriteLine("No user found with this email.");
-                return false; // User not found
+                return false; 
             }
 
             var storedPasswordHash = dataTable.Rows[0]["password"].ToString();
     
-            // Log the password hash for debugging
             Console.WriteLine($"Stored hash: {storedPasswordHash}");
     
-            // Verify the password using BCrypt
             var isPasswordValid = BCrypt.Net.BCrypt.Verify(password, storedPasswordHash);
             Console.WriteLine($"Password is valid: {isPasswordValid}");
 
@@ -118,10 +114,5 @@ namespace Slovo_Filter_DAL.Repositories
 
             return users;
         }
-        
-        
-        
-
-        
     }
 }
